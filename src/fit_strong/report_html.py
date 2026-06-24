@@ -12,6 +12,7 @@ from typing import Optional
 from .algorithms.daily_scheme import DailyScheme
 from .algorithms.fitstrong_score import FitStrongScore
 from .engine import Report
+from .algorithms.cycle_hormone import HormoneAnalysis
 
 _BAND_COLOR = {
     "aandacht nodig": "#c0392b",
@@ -66,7 +67,29 @@ def _scheme_html(scheme: Optional[DailyScheme]) -> str:
     )
 
 
-def render_html(report: Report, score: FitStrongScore, scheme: Optional[DailyScheme] = None) -> str:
+def _hormone_html(hormone: Optional[HormoneAnalysis]) -> str:
+    if hormone is None:
+        return ""
+    alerts = "".join(f"<li>{escape(a)}</li>" for a in hormone.alerts) or "<li>Geen cycluswaarschuwingen.</li>"
+    advice = hormone.advice
+    focus = "".join(f"<li>{escape(x)}</li>" for x in advice.focus)
+    nutrition = "".join(f"<li>{escape(x)}</li>" for x in advice.nutrition)
+    cautions = "".join(f"<li>{escape(x)}</li>" for x in advice.cautions)
+    return (
+        "<h2>Cycluscontext (indicatief)</h2>"
+        f"<p>Fase: <strong>{escape(hormone.current_phase.value)}</strong>; "
+        f"cyclusdag: {hormone.cycle_day if hormone.cycle_day is not None else 'onbekend'}; "
+        f"datakwaliteit: {escape(hormone.data_quality)}.</p>"
+        f"<p>Luteaal vs folliculair verschil: {hormone.luteal_delta if hormone.luteal_delta is not None else 'n.v.t.'}</p>"
+        f"<h3>Waarschuwingen</h3><ul>{alerts}</ul>"
+        f"<h3>Focus</h3><ul>{focus}</ul>"
+        f"<h3>Voeding</h3><ul>{nutrition}</ul>"
+        f"<h3>Let op</h3><ul>{cautions}</ul>"
+        f'<p class="disclaimer">{escape(hormone.disclaimer)}</p>'
+    )
+
+
+def render_html(report: Report, score: FitStrongScore, scheme: Optional[DailyScheme] = None, hormone: Optional[HormoneAnalysis] = None) -> str:
     mt = report.macro_targets
     subs = "".join(f"<tr><td>{escape(k)}</td><td>{v:g}</td></tr>" for k, v in score.subscores.items())
     improvements = "".join(
@@ -105,6 +128,8 @@ def render_html(report: Report, score: FitStrongScore, scheme: Optional[DailySch
 <h2>Verdachte triggers (2–4 u)</h2><ul>{triggers}</ul>
 <h2>Microbioom-score</h2><p>{micro} (indicatief)</p>
 {_scheme_html(scheme)}
+{_hormone_html(hormone)}
 {referral}
 <p class="disclaimer">{escape(report.disclaimer)}</p>
 </body></html>"""
+

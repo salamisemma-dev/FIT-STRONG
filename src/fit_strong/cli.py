@@ -17,9 +17,10 @@ from typing import Any
 
 from .algorithms.daily_scheme import daily_scheme
 from .algorithms.fitstrong_score import fitstrong_score
+from .algorithms.cycle_hormone import analyze_cycle_hormones
 from .engine import generate_report
 from .food_db import load_food_db
-from .models import Client, FoodItem, Meal, Symptom, Workout
+from .models import Client, FoodItem, Meal, Symptom, Workout, MenstrualCycle, HormonalSymptom
 from .report_html import render_html
 from .video_props import weekly_video_props
 
@@ -53,6 +54,12 @@ def _build(data: dict[str, Any], food_db: dict):
                 **{k: v for k, v in w.items() if k != "started_at"})
         for w in data.get("workouts", [])
     ]
+    cycles = [MenstrualCycle(**c) for c in data.get("menstrual_cycles", [])]
+    hormonal_symptoms = [
+        HormonalSymptom(recorded_at=_dt(h["recorded_at"]),
+                        **{k: v for k, v in h.items() if k != "recorded_at"})
+        for h in data.get("hormonal_symptoms", [])
+    ]
     report = generate_report(
         client, meals, symptoms, workouts, food_db,
         day_calories=data.get("day_calories"),
@@ -67,7 +74,19 @@ def _build(data: dict[str, Any], food_db: dict):
     )
     scheme = daily_scheme(client, food_db, fodmap_sensitive=bool(data.get("fodmap_sensitive"))) \
         if food_db else None
-    return report, score, scheme
+    if cycles or hormonal_symptoms:
+        latest_date = max(
+            [s.recorded_at.date() for s in symptoms] +
+            [h.recorded_at.date() for h in hormonal_symptoms]
+        ) if (symptoms or hormonal_symptoms) else None
+        hormone = analyze_cycle_hormones(
+            symptoms, cycles, hormonal_symptoms,
+            today=latest_date,
+            fodmap_sensitive=bool(data.get("fodmap_sensitive", True)),
+        )
+    else:
+        hormone = None
+    return report, score, scheme, hormone
 
 
 def _load_food_db(food_db_path: str | None) -> dict:
@@ -80,10 +99,11 @@ def _load_food_db(food_db_path: str | None) -> dict:
 
 def run(diary_path: str, food_db_path: str | None = None) -> dict:
     data = load_diary(diary_path)
-    report, score, scheme = _build(data, _load_food_db(food_db_path))
+    report, score, scheme, hormone = _build(data, _load_food_db(food_db_path))
     result = report.to_dict()
     result["fitstrong"] = score.to_dict()
     result["daily_scheme"] = scheme.to_dict() if scheme else None
+    result["hormone"] = hormone.to_dict() if hormone else None
     return result
 
 
@@ -103,11 +123,11 @@ def main(argv: list[str] | None = None) -> int:
         pass
 
     data = load_diary(args.diary)
-    report, score, scheme = _build(data, _load_food_db(args.food_db))
+    report, score, scheme, hormone = _build(data, _load_food_db(args.food_db))
 
     if args.html:
         with open(args.html, "w", encoding="utf-8") as fh:
-            fh.write(render_html(report, score, scheme))
+            fh.write(render_html(report, score, scheme, hormone))
         print(f"HTML report written to {args.html}", file=sys.stderr)
     if args.video_props:
         with open(args.video_props, "w", encoding="utf-8") as fh:
@@ -118,6 +138,7 @@ def main(argv: list[str] | None = None) -> int:
     result = report.to_dict()
     result["fitstrong"] = score.to_dict()
     result["daily_scheme"] = scheme.to_dict() if scheme else None
+    result["hormone"] = hormone.to_dict() if hormone else None
     print(json.dumps(result, indent=2, ensure_ascii=False))
     return 0
 

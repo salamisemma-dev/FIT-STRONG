@@ -24,6 +24,7 @@ of the underlying science, that is stated — not hidden.
 | Fibre target 30 g/day (`microbiome_score.py`) | | EFSA Dietary Reference Values for carbohydrates & fibre, 2010 (≥25 g/day adequate); Gezondheidsraad *Richtlijnen goede voeding* 2015 (~30 g/day, 14 g/1000 kcal). | **Strong** | Population target; athletes' needs may differ. |
 | Prebiotic-points anchor 20 pts; 0–10 per-food `prebiotic_score` (`microbiome_score.py`) | | Heuristic encoding of prebiotic/fermentable-fibre richness. | **Hypothesis** | Per-food scores are expert-estimate, not lab values; the 0–100 score is explicitly **indicative**. |
 | Gut–muscle axis / *Roseburia inulinivorans* ↔ grip strength | rationale for prebiotic emphasis | Reported in the source blueprint (LUMC/Granada/Almería line of work). | **Hypothesis** | Not independently verified in this repo. Motivates the prebiotic score only; drives **no** clinical/medical advice. |
+| Cycle-aware hormone/FODMAP context (`cycle_hormone.py`): phase buckets day 1-5/6-13/14-16/17-28; luteal alert delta >=1.5 with >=2 events per phase | phase mapping + pattern threshold | Low-FODMAP has evidence for IBS symptom control but should be temporary/professional-guided; estrogen-gut pain mechanism is early/preclinical; estrobolome literature is mostly associative. See Monash/FODMAP history, Gut 2022 IBS review references, UCSF/Science reporting on estrogen/PYY gut-pain mechanism, estrobolome reviews. | **Moderate (IBS/FODMAP)** / **Hypothesis (cycle pattern threshold)** | No hormone diagnosis. Phase windows and delta are journaling heuristics; cycle length varies, hormonal contraception/perimenopause/endometriosis require clinician context. |
 | Fit & Strong composite weights (`fitstrong_score.py`): protein .25 · energy .20 · microbiome .20 · fodmap .15 · training .10 · symptoms .10; band cuts 40/60/80; improvement cut 70; FODMAP day-cap 45 g; training target 5 h/wk | | Editorial heuristic combining the cited subscore inputs into one headline number. | **Hypothesis** | The **weighting and the composite itself are not validated**. It is a motivational summary, not a diagnosis or fitness measurement. Subscore *inputs* carry their own confidence (rows above). |
 
 ## What this does NOT claim
@@ -34,6 +35,6 @@ of the underlying science, that is stated — not hidden.
   indicative scores), never absolute medical thresholds.
 
 ## Hardening backlog (next round)
-Pin each **Moderate/Hypothesis** row to a specific edition/DOI/URL, replace the
+Pin each **Moderate/Hypothesis** row, especially cycle/hormone rows, to a specific edition/DOI/URL, replace the
 heuristic FODMAP weights with Monash per-portion data where licensing allows, and
 switch the energy floor to FFM when body-composition input is available.

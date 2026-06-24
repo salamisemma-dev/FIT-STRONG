@@ -77,6 +77,20 @@ class Severity(_StrEnum):
     CRITICAL = "critical"
 
 
+class CyclePhase(_StrEnum):
+    MENSTRUAL = "menstrual"
+    FOLLICULAR = "follicular"
+    OVULATORY = "ovulatory"
+    LUTEAL = "luteal"
+    UNKNOWN = "unknown"
+
+
+class MenstrualFlow(_StrEnum):
+    LIGHT = "light"
+    MEDIUM = "medium"
+    HEAVY = "heavy"
+
+
 # ----------------------------------------------------------------------- helpers
 def _require(condition: bool, message: str) -> None:
     if not condition:
@@ -204,6 +218,49 @@ class Workout:
 
 
 @dataclass
+class MenstrualCycle:
+    cycle_start_date: date
+    cycle_end_date: Optional[date] = None
+    avg_cycle_length_days: Optional[int] = None
+    symptoms: dict[str, Any] = field(default_factory=dict)
+
+    def __post_init__(self) -> None:
+        if isinstance(self.cycle_start_date, str):
+            self.cycle_start_date = date.fromisoformat(self.cycle_start_date)
+        if isinstance(self.cycle_end_date, str):
+            self.cycle_end_date = date.fromisoformat(self.cycle_end_date)
+        if self.cycle_end_date is not None:
+            _require(self.cycle_end_date >= self.cycle_start_date, "cycle_end_date must be >= cycle_start_date")
+        if self.avg_cycle_length_days is not None:
+            _require(15 <= self.avg_cycle_length_days <= 45,
+                     f"avg_cycle_length_days must be in [15, 45], got {self.avg_cycle_length_days}")
+
+
+@dataclass
+class HormonalSymptom:
+    recorded_at: datetime
+    cycle_day: Optional[int] = None
+    pelvic_pain: Optional[int] = None
+    menstrual_flow: Optional[MenstrualFlow] = None
+    mood_irritability: Optional[int] = None
+    headache: bool = False
+    breast_tenderness: Optional[int] = None
+    cycle_wellbeing: Optional[int] = None
+    notes: Optional[str] = None
+
+    def __post_init__(self) -> None:
+        if isinstance(self.recorded_at, str):
+            self.recorded_at = datetime.fromisoformat(self.recorded_at)
+        if self.menstrual_flow is not None:
+            self.menstrual_flow = MenstrualFlow.coerce(self.menstrual_flow)
+        _in_range(self.cycle_day, 1, 45, "cycle_day")
+        _in_range(self.pelvic_pain, 0, 10, "pelvic_pain")
+        _in_range(self.mood_irritability, 0, 10, "mood_irritability")
+        _in_range(self.breast_tenderness, 0, 10, "breast_tenderness")
+        _in_range(self.cycle_wellbeing, 1, 10, "cycle_wellbeing")
+
+
+@dataclass
 class Alert:
     alert_type: str
     severity: Severity
@@ -214,3 +271,4 @@ class Alert:
 
     def to_dict(self) -> dict:
         return {"alert_type": self.alert_type, "severity": self.severity.value, "message": self.message}
+

@@ -5,7 +5,7 @@ version: 1.0.0
 status: approved
 owner: fit-strong-core
 depends_on: []
-consumed_by: [spec-macro-targets, spec-fodmap-load, spec-trigger-detection, spec-energy-balance, spec-microbiome-score, spec-report-engine]
+consumed_by: [spec-macro-targets, spec-fodmap-load, spec-trigger-detection, spec-energy-balance, spec-microbiome-score, spec-report-engine, spec-cycle-hormone]
 ---
 
 ## Intent
@@ -38,6 +38,13 @@ Dataclasses in `src/fit_strong/models.py` (frozen where natural):
     energy_level/fatigue 1–10.
 - `Workout(started_at: datetime, duration_min, intensity, workout_type=None,
   perceived_exertion=None)` — intensity 1–10; perceived_exertion (Borg) 6–20 if set.
+- `CyclePhase` = Enum('menstrual','follicular','ovulatory','luteal','unknown').
+- `MenstrualFlow` = Enum('light','medium','heavy').
+- `MenstrualCycle(cycle_start_date, cycle_end_date=None, avg_cycle_length_days=None, symptoms={})`.
+  - validate: start/end are ISO dates or `date`; end >= start; avg length in [15,45] if set.
+- `HormonalSymptom(recorded_at, cycle_day=None, pelvic_pain=None, menstrual_flow=None,
+  mood_irritability=None, headache=False, breast_tenderness=None, cycle_wellbeing=None, notes=None)`.
+  - validate: cycle_day 1-45; pelvic/mood/breast 0-10; cycle_wellbeing 1-10.
 - `Alert(alert_type, severity, message)` — severity in {info,warning,critical}.
 
 ## Business rules
@@ -51,4 +58,5 @@ consumers and their tests — change this spec first, then regenerate.
 
 ## Verification
 `tests/test_models.py` — asserts valid construction, every range CHECK raising
-`ValueError`, and enum-from-string coercion.
+`ValueError`, enum-from-string coercion, and cycle/hormonal range validation.
+

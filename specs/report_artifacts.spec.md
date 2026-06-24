@@ -4,7 +4,7 @@ type: orchestration
 version: 1.0.0
 status: approved
 owner: fit-strong-core
-depends_on: [spec-report-engine, spec-fitstrong-score, spec-daily-scheme]
+depends_on: [spec-report-engine, spec-fitstrong-score, spec-daily-scheme, spec-cycle-hormone]
 consumed_by: [cli, fit-strong-skill, weekly-video]
 ---
 
@@ -14,11 +14,11 @@ report** (read it, act on it) and **weekly-video props** (data for an optional R
 recap clip). No web framework, no external assets — keeps the engine stdlib-only.
 
 ## Contract
-`src/fit_strong/report_html.py::render_html(report, score, scheme=None) -> str`:
+`src/fit_strong/report_html.py::render_html(report, score, scheme=None, hormone=None) -> str`:
 - One self-contained HTML document (inline CSS + inline SVG; no external links/JS).
 - Sections: Fit&Strong score gauge (SVG, 0–100, banded), macro-targets table, alerts list
   (critical visually distinct), suspected triggers, microbiome score, improvements
-  ("wat kan beter"), the daily scheme table if provided, and the disclaimer + referral.
+  ("wat kan beter"), the daily scheme table if provided, optional cycle/hormone section if provided, and the disclaimer + referral.
 - Pure string building; deterministic; UTF-8.
 
 `src/fit_strong/video_props.py::weekly_video_props(score, *, week_label) -> dict`:
@@ -38,5 +38,5 @@ The Remotion app reads the props JSON. Field renames ripple to `video/`.
 
 ## Verification
 `tests/test_report_artifacts.py` — `render_html` returns one HTML doc containing the score,
-disclaimer, and a scheme row, with no `http://`/`https://` external asset references;
+disclaimer, a scheme row, and the optional hormone section, with no `http://`/`https://` external asset references;
 `weekly_video_props` returns a JSON-serialisable dict with ≤3 improvements and the score.

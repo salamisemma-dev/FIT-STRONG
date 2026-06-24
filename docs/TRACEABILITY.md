@@ -124,3 +124,14 @@ marker. Until then this matrix is the reviewed contract.
 - config/package data mirrors stay identical -> `tests/test_combination_library.py::test_config_and_packaged_library_copies_are_identical`
 - rule ingredients reference known library items -> `tests/test_combination_library.py::test_rule_ingredients_reference_known_library_items`
 - object/meal-doc request shapes accepted, requested amount honored -> `tests/test_combination_library.py::test_accepts_object_request_shapes`
+
+
+## spec-cycle-hormone
+- Phase mapping boundaries -> `tests/test_cycle_hormone.py::test_phase_mapping`
+- Cycle day from user-provided start date -> `tests/test_cycle_hormone.py::test_cycle_day_from_start_date`
+- Missing/insufficient data does not invent patterns -> `tests/test_cycle_hormone.py::test_insufficient_data_does_not_invent_pattern`
+- Luteal-vs-follicular alert requires enough data and threshold -> `tests/test_cycle_hormone.py::test_luteal_pattern_alert_requires_enough_data`
+- Severe pelvic pain/heavy bleeding referral-style alerts -> `tests/test_cycle_hormone.py::test_severe_hormonal_symptoms_alert`
+- CLI emits hormone JSON only when cycle data exists -> `tests/test_cycle_hormone.py::test_cli_emits_hormone_section_when_cycle_data_present`
+- HTML renders optional hormone section with disclaimer -> `tests/test_cycle_hormone.py::test_html_renders_hormone_section`
+- Cycle/hormonal dataclass validation -> `tests/test_models.py::test_cycle_and_hormonal_models_validate_ranges`

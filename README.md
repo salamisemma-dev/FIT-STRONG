@@ -22,6 +22,7 @@ gut health**.
 | `daily_scheme` | Deterministic daily nutrition scheme toward macro/energy targets |
 | `render_html` | Self-contained HTML report (SVG gauge, offline, zero deps) |
 | `weekly_video_props` | Props for the optional Remotion weekly-recap clip (`video/`) |
+| `analyze_cycle_hormones` | Optional cycle-aware symptom context + phase advice (indicative, no diagnosis) |
 
 ## Quickstart
 ```bash
@@ -77,10 +78,11 @@ examples/sample_report.html      # generated demo report (double-click to open)
 examples/sample_combination_request.json
 examples/sample_high_protein_meal.json
 examples/sample_supplement_stack.json
+examples/sample_cycle_diary.json
 ```
 
 ## Status
-Core engine complete & green (66 tests). UI = self-contained HTML report (`--html`) +
+Core engine complete & green (74 tests). UI = self-contained HTML report (`--html`) +
 optional Remotion weekly video (`video/`, render verified, npm audit clean). Postgres persistence, auth, multi-day trends
 and ML are **roadmap** — see [docs/PVA.md](docs/PVA.md). The engine is deliberately free
 of those concerns so they layer on without a rewrite.

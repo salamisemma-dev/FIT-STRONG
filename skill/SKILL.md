@@ -78,3 +78,12 @@ supplements as medical treatment.
 ## Verify before claiming done
 Run `python -m unittest discover -s tests` and `node scripts/bob_validate.mjs --strict .`
 from the repo root — both must be green.
+
+
+## Cyclus- en hormooncontext
+Wanneer een gebruiker menstruatiecyclus, endometriose-achtige klachten, PMS of hormonale
+klachten noemt, vraag optioneel naar `menstrual_cycles` en `hormonal_symptoms` volgens
+`examples/sample_cycle_diary.json`. Gebruik de output als patrooncontext, nooit als diagnose:
+"cyclusfase kan samengaan met veranderde darmgevoeligheid". Bij hevige bekkenpijn,
+hevig bloedverlies, mogelijke zwangerschap of aanhoudende klachten: verwijs naar arts,
+gynaecoloog of diëtist.

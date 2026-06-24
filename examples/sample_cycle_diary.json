@@ -1,0 +1,18 @@
+{
+  "client": {"name": "Cyclus demo", "weight_kg": 70, "height_cm": 170, "sex": "female", "training_goal": "general_fitness", "weekly_sport_hours": 4},
+  "fodmap_sensitive": true,
+  "meals": [],
+  "symptoms": [
+    {"recorded_at": "2026-01-07T08:00:00", "abdominal_pain": 2, "bloating": 3},
+    {"recorded_at": "2026-01-09T08:00:00", "abdominal_pain": 3, "bloating": 2},
+    {"recorded_at": "2026-01-21T08:00:00", "abdominal_pain": 7, "bloating": 8},
+    {"recorded_at": "2026-01-23T08:00:00", "abdominal_pain": 8, "bloating": 7}
+  ],
+  "menstrual_cycles": [
+    {"cycle_start_date": "2026-01-01", "avg_cycle_length_days": 28}
+  ],
+  "hormonal_symptoms": [
+    {"recorded_at": "2026-01-23T09:00:00", "cycle_day": 23, "pelvic_pain": 6, "menstrual_flow": "medium", "mood_irritability": 5, "cycle_wellbeing": 4}
+  ]
+}
+

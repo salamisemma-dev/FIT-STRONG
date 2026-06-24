@@ -14,6 +14,14 @@ from .algorithms.microbiome_score import MicrobiomeScore, microbiome_score
 from .algorithms.trigger_detection import TriggerScore, detect_triggers
 from .algorithms.fitstrong_score import FitStrongScore, Improvement, fitstrong_score
 from .algorithms.daily_scheme import DailyScheme, SchemeMeal, daily_scheme
+from .algorithms.cycle_hormone import (
+    CyclePhaseAdvice,
+    HormoneAnalysis,
+    analyze_cycle_hormones,
+    cycle_day_for,
+    phase_advice,
+    phase_for_cycle_day,
+)
 from .engine import DISCLAIMER, Report, generate_report
 from .report_html import render_html
 from .video_props import weekly_video_props
@@ -40,6 +48,10 @@ from .models import (
     Symptom,
     TrainingGoal,
     Workout,
+    CyclePhase,
+    MenstrualFlow,
+    MenstrualCycle,
+    HormonalSymptom,
 )
 
 __version__ = "1.0.0"
@@ -47,6 +59,7 @@ __version__ = "1.0.0"
 __all__ = [
     "Alert", "Client", "FodmapGroup", "FodmapLevel", "FoodItem", "FoodRef", "Meal",
     "MealType", "Severity", "Sex", "Symptom", "TrainingGoal", "Workout",
+    "CyclePhase", "MenstrualFlow", "MenstrualCycle", "HormonalSymptom",
     "MacroTargets", "compute_macro_targets",
     "fodmap_load", "meal_exceeds_threshold", "DEFAULT_THRESHOLD_G",
     "detect_triggers", "TriggerScore",
@@ -55,6 +68,8 @@ __all__ = [
     "generate_report", "Report", "DISCLAIMER",
     "fitstrong_score", "FitStrongScore", "Improvement",
     "daily_scheme", "DailyScheme", "SchemeMeal",
+    "analyze_cycle_hormones", "cycle_day_for", "phase_for_cycle_day", "phase_advice",
+    "CyclePhaseAdvice", "HormoneAnalysis",
     "render_html", "weekly_video_props",
     "load_food_db",
     "SupplementRef", "CombinationRule", "CombinationRecommendation",

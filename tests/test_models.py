@@ -58,6 +58,24 @@ class TestModels(unittest.TestCase):
         with self.assertRaises(ValueError):
             m.FoodRef("bad", "fructan", "high", 1, 1, 1, 1, 1, 1, -1)
 
+    def test_cycle_and_hormonal_models_validate_ranges(self):
+        c = m.MenstrualCycle(cycle_start_date="2026-01-01", avg_cycle_length_days=28)
+        self.assertEqual(c.cycle_start_date.isoformat(), "2026-01-01")
+        with self.assertRaises(ValueError):
+            m.MenstrualCycle(cycle_start_date="2026-01-10", cycle_end_date="2026-01-01")
+        with self.assertRaises(ValueError):
+            m.MenstrualCycle(cycle_start_date="2026-01-01", avg_cycle_length_days=60)
+
+        h = m.HormonalSymptom(recorded_at=datetime(2026, 1, 1), cycle_day=1,
+                              pelvic_pain=5, menstrual_flow="medium", cycle_wellbeing=7)
+        self.assertEqual(h.menstrual_flow.value, "medium")
+        with self.assertRaises(ValueError):
+            m.HormonalSymptom(recorded_at=datetime(2026, 1, 1), cycle_day=50)
+        with self.assertRaises(ValueError):
+            m.HormonalSymptom(recorded_at=datetime(2026, 1, 1), pelvic_pain=11)
+        with self.assertRaises(ValueError):
+            m.HormonalSymptom(recorded_at=datetime(2026, 1, 1), menstrual_flow="extreme")
+
     def test_alert_severity_and_dict(self):
         a = m.Alert("low_protein", "critical", "x")
         self.assertEqual(a.to_dict()["severity"], "critical")
@@ -67,3 +85,4 @@ class TestModels(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
