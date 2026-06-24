@@ -79,10 +79,14 @@ examples/sample_combination_request.json
 examples/sample_high_protein_meal.json
 examples/sample_supplement_stack.json
 examples/sample_cycle_diary.json
+templates/voedingsdagboek_template_man.docx
+templates/voedingsdagboek_template_vrouw.docx
+docs/APP_PVA.md
 ```
 
 ## Status
-Core engine complete & green (74 tests). UI = self-contained HTML report (`--html`) +
+Core engine complete & green (77 tests). UI = self-contained HTML report (`--html`) +
 optional Remotion weekly video (`video/`, render verified, npm audit clean). Postgres persistence, auth, multi-day trends
 and ML are **roadmap** — see [docs/PVA.md](docs/PVA.md). The engine is deliberately free
 of those concerns so they layer on without a rewrite.
+

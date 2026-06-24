@@ -135,3 +135,8 @@ marker. Until then this matrix is the reviewed contract.
 - CLI emits hormone JSON only when cycle data exists -> `tests/test_cycle_hormone.py::test_cli_emits_hormone_section_when_cycle_data_present`
 - HTML renders optional hormone section with disclaimer -> `tests/test_cycle_hormone.py::test_html_renders_hormone_section`
 - Cycle/hormonal dataclass validation -> `tests/test_models.py::test_cycle_and_hormonal_models_validate_ranges`
+
+## spec-intake-templates -> `tests/test_intake_templates.py`
+- Male template contains shared daily intake/symptom/training/export fields and no cycle requirement -> `tests/test_intake_templates.py::test_male_template_has_shared_daily_fields_without_cycle_requirement`
+- Female template contains optional cycle context and no-diagnosis language -> `tests/test_intake_templates.py::test_female_template_has_optional_cycle_context`
+- App PvA is novice-first and exports engine-ready JSON -> `tests/test_intake_templates.py::test_app_pva_is_novice_first_and_exports_to_engine`

@@ -10,7 +10,7 @@ SCFA, FODMAP-restrictie, trainingsbelasting.
 
 **In scope (deze build):** pure rekenkern (macro-targets, FODMAP-load, triggerdetectie,
 energiebalans, microbioom-score), getypte datamodellen, referentie-voedingsdatabase,
-CLI, Claude-skill wrapper, uitgebreide voeding-/supplementbibliotheek en combinatie-engine, **Fit&Strong-score + dagschema-generator + gap-analyse**, **self-contained HTML-rapport** en **optionele Remotion weekvideo** (geïsoleerd subproject). BOB-proof: constitution + 13 specs + strikte validator + 74 tests.
+CLI, Claude-skill wrapper, uitgebreide voeding-/supplementbibliotheek en combinatie-engine, **Fit&Strong-score + dagschema-generator + gap-analyse**, **self-contained HTML-rapport** en **optionele Remotion weekvideo** (geïsoleerd subproject). BOB-proof: constitution + 14 specs + strikte validator + 77 tests.
 
 **Buiten scope (roadmap):** stateful web-frontend (Next.js), persistentie (Postgres/RLS), auth,
 notificaties, multi-dag trend, ML-modellen. De engine blijft vrij van die zorgen zodat ze later als
@@ -27,7 +27,7 @@ gedocumenteerd met bron in de bijbehorende spec (geen "magic numbers").
 | # | Voordeel | — |
 |---|----------|---|
 | V1 | Wetenschappelijk traceerbaar: elke drempel staat in `docs/EVIDENCE.md` met **bron + confidence-level** (Strong/Moderate/Hypothesis) en eerlijke caveat; geen bluf. | |
-| V2 | Pure functies → deterministisch, triviaal te testen (74 tests). | |
+| V2 | Pure functies → deterministisch, triviaal te testen (77 tests). | |
 | V3 | Zero runtime-dependencies → draait overal met kale Python, geen supply-chain-risico. | |
 | V4 | Spec-driven (BOB) → intentie is permanente, machine-gecontroleerde memory. | |
 | V5 | Engine los van UI/DB → frontend & persistentie later inplugbaar zonder herschrijven. | |
@@ -36,6 +36,7 @@ gedocumenteerd met bron in de bijbehorende spec (geen "magic numbers").
 | V8 | Beantwoordt nu de echte vraag ("hoe fit & strong ben ik + wat beter") via composite-score + gap-analyse + dagschema, en levert een **leesbaar self-contained HTML-rapport** (offline, zero deps). UI zonder de engine dependency-vuil binnen te halen. | |
 | V9 | Video bewust geïsoleerd in `video/` (eigen deps); engine heeft nooit Node nodig. Juiste medium-keuze: rapport = kern, video = optionele recap. | |
 | V10 | Cycluscontext helpt gebruikers patronen rond klachten, FODMAP en fase te zien zonder aan de FODMAP-kern of trigger-score te morrelen. | |
+| V11 | Man/vrouw-dagboektemplates maken dagelijkse invoer haalbaar voor leken en bereiden een toekomstige app-export voor. | |
 
 | # | Nadeel | Fix (toegepast in deze build) |
 |---|--------|-------------------------------|
@@ -59,7 +60,8 @@ gedocumenteerd met bron in de bijbehorende spec (geen "magic numbers").
 | N18 | **Remotion weekvideo kon blijven hangen als scaffold** — zonder echte install/render blijft het risico "lijkt af, is niet getest". | **Gefixt:** `video/` is geïnstalleerd, `npm audit` is 0 vulnerabilities, `npm run render` rendert engine-gevoede `video/out/weekly-recap.mp4`. Scripts zijn Windows-padveilig gemaakt voor `FIT&STRONG` (`&` in pad). |
 | N19 | **Dagschema kan targets niet halen** uit een kleine food-DB → misleidend "compleet" plan. | **Gefixt:** `coverage`-percentages + expliciete `notes` als eiwit/energie <80% ("doel niet gehaald, breid DB uit"). Geen stille pretentie van dekking. |
 | N20 | **Hormoon/cyclusclaims kunnen snel medisch klinken** — de aangeleverde tekst noemt oestrogeen, endometriose en estroboloom; verkeerd geformuleerd lijkt dat diagnose of behandeling. | **Beheerst:** aparte `cycle_hormone`-laag, geen FODMAP-multiplier, geen diagnosewoorden, datakwaliteit (`insufficient_data`/`partial_data`/`pattern_ready`), referral-alerts bij hevige pijn/bloedverlies en verplichte disclaimer. Evidence gemarkeerd als Moderate/Hypothesis. |
-| N21 | **Cyclusdata kan ontbreken of variëren** door onregelmatige cycli, hormonale anticonceptie, zwangerschap, perimenopauze of individuele verschillen. | **Beheerst:** engine leidt niets af uit `sex`; gebruikt alleen expliciet aangeleverde `menstrual_cycles`/`hormonal_symptoms`; bij te weinig data geen patroonconclusie. |
+| N21 | **Cyclusdata kan ontbreken of variëren** door onregelmatige cycli, hormonale anticonceptie, zwangerschap, perimenopauze of individuele verschillen. | **Beheerst:** engine leidt niets af uit sex; gebruikt alleen expliciet aangeleverde menstrual_cycles/hormonal_symptoms; bij te weinig data geen patroonconclusie. |
+| N22 | **Dagboek invullen kan te technisch worden** voor leken, zeker met JSON/grammen/FODMAP-termen. | **Beheerst:** aparte man/vrouw-DOCX templates met grote invulsecties, laat onbekend leeg, portievelden, supplementen, klachten, herstel en analyse-ready blok; app-PvA kiest leek-modus, favorieten en exportknop boven technische invoer. |
 
 ## 4. Roadmap (buiten deze sessie)
 0. **Evidence-verharding:** elke Moderate/Hypothesis-rij in `docs/EVIDENCE.md` pinnen op editie/DOI/URL; heuristische FODMAP-gewichten vervangen door Monash per-portie-data; energie-floor op FFM i.p.v. totaal lichaamsgewicht zodra lichaamssamenstelling-input bestaat. Clause-niveau traceability machine-enforced maken (`docs/TRACEABILITY.md` backlog).
@@ -70,11 +72,12 @@ gedocumenteerd met bron in de bijbehorende spec (geen "magic numbers").
 5. Notificatie-service (dagboek-reminders).
 
 ## 5. Definition of Done (deze build) — gehaald
-- [x] Constitution + 13 approved specs, strikte validator groen.
+- [x] Constitution + 14 approved specs, strikte validator groen.
 - [x] Pure engine + modellen + CLI + food/supplement/rules bibliotheek + score/scheme/rapport.
-- [x] 74 tests groen (`unittest`, stdlib).
+- [x] 77 tests groen (`unittest`, stdlib).
 - [x] CLI end-to-end op voorbeelddagboek + cyclusdemo + HTML-rapport + video-props.
 - [x] Self-contained HTML-rapport (8 secties, zero externe assets) + Remotion weekvideo echt gerenderd (`video/out/weekly-recap.mp4`, ignored artifact).
 - [x] Claude-skill wrapper.
 - [x] Elk geïdentificeerd nadeel gefixt of expliciet beheerst.
+
 
