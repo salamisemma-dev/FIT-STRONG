@@ -4,14 +4,15 @@
   "private": true,
   "description": "Optional Remotion weekly-recap clip for Fit & Strong. Fed by engine props (see ../specs/report_artifacts.spec.md). Isolated from the stdlib-only Python engine.",
   "scripts": {
-    "studio": "remotion studio",
-    "render": "remotion render WeeklyRecap out/weekly-recap.mp4 --props=./props.json",
-    "render:example": "remotion render WeeklyRecap out/example.mp4 --props=./props.example.json"
+    "studio": "node ./node_modules/@remotion/cli/remotion-cli.js studio",
+    "render": "node ./node_modules/@remotion/cli/remotion-cli.js render WeeklyRecap out/weekly-recap.mp4 --props=./props.json",
+    "render:example": "node ./node_modules/@remotion/cli/remotion-cli.js render WeeklyRecap out/example.mp4 --props=./props.example.json"
   },
   "dependencies": {
-    "@remotion/cli": "4.0.0",
+    "@remotion/cli": "4.0.482",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "remotion": "4.0.0"
+    "remotion": "4.0.482",
+    "zod": "4.3.6"
   }
 }

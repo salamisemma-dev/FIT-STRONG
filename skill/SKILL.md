@@ -54,7 +54,7 @@ supplements as medical treatment.
 - **daily_scheme** → present the day plan + `coverage`%; read out any `notes` (e.g. doel
   niet gehaald uit DB). Indicatief, geen voorschrift.
 - For a shareable artefact: generate `--html report.html` (offline rapport) or
-  `--video-props` → render via `video/` (Remotion, optioneel; needs `npm install`).
+  `--video-props` → render via `video/` (Remotion, optioneel; render path verified with pinned deps).
 - **macro_targets** → present protein (g), carb band (g, moderate/intensive) and energy
   range. Add pre/post-workout timing (pre 1–2 g/kg carbs low-FODMAP; post 25 g eiwit +
   ~40 g snelle koolhydraten).

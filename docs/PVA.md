@@ -27,7 +27,7 @@ gedocumenteerd met bron in de bijbehorende spec (geen "magic numbers").
 | # | Voordeel | — |
 |---|----------|---|
 | V1 | Wetenschappelijk traceerbaar: elke drempel staat in `docs/EVIDENCE.md` met **bron + confidence-level** (Strong/Moderate/Hypothesis) en eerlijke caveat; geen bluf. | |
-| V2 | Pure functies → deterministisch, triviaal te testen (52 tests). | |
+| V2 | Pure functies → deterministisch, triviaal te testen (66 tests). | |
 | V3 | Zero runtime-dependencies → draait overal met kale Python, geen supply-chain-risico. | |
 | V4 | Spec-driven (BOB) → intentie is permanente, machine-gecontroleerde memory. | |
 | V5 | Engine los van UI/DB → frontend & persistentie later inplugbaar zonder herschrijven. | |
@@ -54,7 +54,7 @@ gedocumenteerd met bron in de bijbehorende spec (geen "magic numbers").
 | N14 | **Combinatieregels als vrije strings** konden later richting onveilige `eval` of onduidelijke parser groeien. | **Gefixt:** regels gebruiken declaratieve predicates (`meal_timing`, `*_gt`, `*_lt`, booleans); engine evalueert alleen een kleine allowlist. |
 | N15 | **Bronclaims van aangeleverde items zijn breed** (Monash/NEVO/ISSN zonder exacte editie/URL per item). | **Beheerst:** `source` is metadata, geen harde medische claim; PvA/EVIDENCE blijven eerlijk dat exacte bronpinning en Monash-portiedata roadmap zijn. |
 | N17 | **Fit&Strong-score suggereert valse precisie** — één getal kan als gevalideerde fitness-meting gelezen worden. | **Beheerst:** score expliciet als heuristiek/indicatief gelabeld (band-tekst + disclaimer + `docs/EVIDENCE.md` confidence=Hypothesis voor gewichten). Subscores tonen herkomst; geen diagnose. Validatie = roadmap. |
-| N18 | **Remotion weekvideo is een scaffold** — niet `npm install`-ed of gerenderd in deze omgeving → risico op "lijkt af, is niet getest". | **Eerlijk gelabeld:** `video/README.md` zegt expliciet scaffold + render-stappen; de **Python-props (`weekly_video_props`) zijn wél getest**. mp4-render vereist `npm install` + `npm run render` lokaal. |
+| N18 | **Remotion weekvideo kon blijven hangen als scaffold** — zonder echte install/render blijft het risico "lijkt af, is niet getest". | **Gefixt:** `video/` is geïnstalleerd, `npm audit` is 0 vulnerabilities, `npm run render` rendert engine-gevoede `video/out/weekly-recap.mp4`. Scripts zijn Windows-padveilig gemaakt voor `FIT&STRONG` (`&` in pad). |
 | N19 | **Dagschema kan targets niet halen** uit een kleine food-DB → misleidend "compleet" plan. | **Gefixt:** `coverage`-percentages + expliciete `notes` als eiwit/energie <80% ("doel niet gehaald, breid DB uit"). Geen stille pretentie van dekking. |
 | N16 | **Twee voorbeeld-requests (`sample_high_protein_meal`, `sample_supplement_stack`) gaven stil leeg resultaat** — engine las alleen `available_foods`/`available_supplements` als id-string-lijsten, niet de meal/stack-objectvorm → misleidende voorbeelden. | **Gefixt:** `recommend_combination` accepteert nu `available_foods`/`foods` én `available_supplements`/`supplements`, elk als id-string of `{id\|name, amount_g}`; opgegeven `amount_g` wordt gehonoreerd i.p.v. default safe-portion. Een gevulde request valt nooit meer stil weg door zijn vorm. Regressietest `test_accepts_object_request_shapes`. |
 
@@ -71,6 +71,6 @@ gedocumenteerd met bron in de bijbehorende spec (geen "magic numbers").
 - [x] Pure engine + modellen + CLI + food/supplement/rules bibliotheek + score/scheme/rapport.
 - [x] 66 tests groen (`unittest`, stdlib).
 - [x] CLI end-to-end op voorbeelddagboek + HTML-rapport + video-props.
-- [x] Self-contained HTML-rapport (8 secties, zero externe assets) + Remotion video-scaffold.
+- [x] Self-contained HTML-rapport (8 secties, zero externe assets) + Remotion weekvideo echt gerenderd (`video/out/weekly-recap.mp4`, ignored artifact).
 - [x] Claude-skill wrapper.
 - [x] Elk geïdentificeerd nadeel gefixt of expliciet beheerst.

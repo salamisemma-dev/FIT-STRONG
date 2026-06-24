@@ -68,7 +68,7 @@ tests/                   # 66 unittest cases, spec-linked
 scripts/bob_validate.mjs # spec + library drift gate (CI)
 scripts/bob_ready.mjs    # validate + tests in one gate (CI)
 skill/SKILL.md           # Claude coaching-skill wrapper
-video/                   # OPTIONAL Remotion weekly-recap clip (own deps, isolated)
+video/                   # OPTIONAL Remotion weekly-recap clip (own deps, isolated; render verified)
 docs/PVA.md              # plan van aanpak: pros, cons, and the fix for each con
 docs/EVIDENCE.md         # every threshold + source + confidence level (honest)
 docs/TRACEABILITY.md     # spec clause -> test method matrix
@@ -81,6 +81,6 @@ examples/sample_supplement_stack.json
 
 ## Status
 Core engine complete & green (66 tests). UI = self-contained HTML report (`--html`) +
-optional Remotion weekly video (`video/`). Postgres persistence, auth, multi-day trends
+optional Remotion weekly video (`video/`, render verified, npm audit clean). Postgres persistence, auth, multi-day trends
 and ML are **roadmap** — see [docs/PVA.md](docs/PVA.md). The engine is deliberately free
 of those concerns so they layer on without a rewrite.
