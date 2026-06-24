@@ -1,9 +1,10 @@
-"""Fit & Strong CLI — render a personalised report from a diary JSON file.
+"""Fit & Strong CLI — personalised report from a diary JSON file.
 
 Usage:
-    python -m fit_strong.cli path/to/diary.json [--food-db config/food_db.json]
+    fit-strong path/to/diary.json [--food-db food_db.json]
+                                  [--html report.html] [--video-props props.json]
 
-Diary JSON shape: see examples/sample_diary.json.
+The bundled food DB is used by default. Diary JSON shape: see examples/sample_diary.json.
 """
 
 from __future__ import annotations
@@ -14,9 +15,13 @@ import sys
 from datetime import datetime
 from typing import Any
 
+from .algorithms.daily_scheme import daily_scheme
+from .algorithms.fitstrong_score import fitstrong_score
 from .engine import generate_report
 from .food_db import load_food_db
 from .models import Client, FoodItem, Meal, Symptom, Workout
+from .report_html import render_html
+from .video_props import weekly_video_props
 
 
 def _dt(value: str) -> datetime:
@@ -34,8 +39,8 @@ def load_diary(path: str) -> dict[str, Any]:
         return json.load(fh)
 
 
-def run(diary_path: str, food_db_path: str | None = None) -> dict:
-    data = load_diary(diary_path)
+def _build(data: dict[str, Any], food_db: dict):
+    """Construct all engine artefacts from a parsed diary (no I/O, no mutation)."""
     client = Client(**data["client"])
     meals = [_build_meal(m) for m in data.get("meals", [])]
     symptoms = [
@@ -48,13 +53,6 @@ def run(diary_path: str, food_db_path: str | None = None) -> dict:
                 **{k: v for k, v in w.items() if k != "started_at"})
         for w in data.get("workouts", [])
     ]
-
-    food_db = {}
-    try:
-        food_db = load_food_db(food_db_path)
-    except FileNotFoundError:
-        print("warn: food DB not found — microbiome score skipped", file=sys.stderr)
-
     report = generate_report(
         client, meals, symptoms, workouts, food_db,
         day_calories=data.get("day_calories"),
@@ -62,13 +60,40 @@ def run(diary_path: str, food_db_path: str | None = None) -> dict:
         bristol_events=data.get("bristol_events"),
         no_improvement_weeks=data.get("no_improvement_weeks", 0.0),
     )
-    return report.to_dict()
+    all_items = [item for meal in meals for item in meal.items]
+    score = fitstrong_score(
+        client, data.get("day_calories"), data.get("day_protein_g"),
+        all_items, food_db, workouts=workouts, symptoms=symptoms,
+    )
+    scheme = daily_scheme(client, food_db, fodmap_sensitive=bool(data.get("fodmap_sensitive"))) \
+        if food_db else None
+    return report, score, scheme
+
+
+def _load_food_db(food_db_path: str | None) -> dict:
+    try:
+        return load_food_db(food_db_path)
+    except FileNotFoundError:
+        print("warn: food DB not found — microbiome/scheme skipped", file=sys.stderr)
+        return {}
+
+
+def run(diary_path: str, food_db_path: str | None = None) -> dict:
+    data = load_diary(diary_path)
+    report, score, scheme = _build(data, _load_food_db(food_db_path))
+    result = report.to_dict()
+    result["fitstrong"] = score.to_dict()
+    result["daily_scheme"] = scheme.to_dict() if scheme else None
+    return result
 
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="fit-strong", description="Evidence-based coaching report.")
     parser.add_argument("diary", help="path to diary JSON")
-    parser.add_argument("--food-db", default=None, help="path to food_db.json")
+    parser.add_argument("--food-db", default=None, help="path to food_db.json (default: bundled)")
+    parser.add_argument("--html", default=None, help="write a self-contained HTML report to this path")
+    parser.add_argument("--video-props", default=None, help="write Remotion weekly-video props JSON here")
+    parser.add_argument("--week-label", default="Deze week", help="label for the weekly video")
     args = parser.parse_args(argv)
 
     # Dutch text + Windows console: force UTF-8 so accented chars render correctly.
@@ -77,7 +102,22 @@ def main(argv: list[str] | None = None) -> int:
     except (AttributeError, ValueError):  # pragma: no cover
         pass
 
-    result = run(args.diary, args.food_db)
+    data = load_diary(args.diary)
+    report, score, scheme = _build(data, _load_food_db(args.food_db))
+
+    if args.html:
+        with open(args.html, "w", encoding="utf-8") as fh:
+            fh.write(render_html(report, score, scheme))
+        print(f"HTML report written to {args.html}", file=sys.stderr)
+    if args.video_props:
+        with open(args.video_props, "w", encoding="utf-8") as fh:
+            json.dump(weekly_video_props(score, week_label=args.week_label), fh,
+                      indent=2, ensure_ascii=False)
+        print(f"Video props written to {args.video_props}", file=sys.stderr)
+
+    result = report.to_dict()
+    result["fitstrong"] = score.to_dict()
+    result["daily_scheme"] = scheme.to_dict() if scheme else None
     print(json.dumps(result, indent=2, ensure_ascii=False))
     return 0
 

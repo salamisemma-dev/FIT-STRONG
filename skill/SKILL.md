@@ -32,12 +32,14 @@ Help the user log meals (time, foods + grams, FODMAP group/level if known), symp
 Assemble into the diary JSON shape in `../examples/sample_diary.json`.
 
 ### Phase 2 — Analysis (run the engine)
-From the repo root:
 ```bash
-fit-strong <diary.json> --food-db config/food_db.json
-# source checkout without install: PowerShell `$env:PYTHONPATH="src"; python -m fit_strong.cli <diary.json> --food-db config/food_db.json`
+fit-strong <diary.json>                          # JSON report (bundled food DB)
+fit-strong <diary.json> --html report.html       # + self-contained HTML report (offline)
+fit-strong <diary.json> --video-props props.json # + Remotion weekly-video props
 ```
-This returns the full report as JSON. (Or import `fit_strong.generate_report` directly.)
+JSON output also carries `fitstrong` (composite 0–100 score + band + "wat kan beter"
+improvements) and `daily_scheme` (an indicative day plan toward the macro targets).
+(Or import `fit_strong.generate_report` / `fitstrong_score` / `daily_scheme` directly.)
 
 ### Phase 3 — Combination support (optional)
 When the user asks "wat kan ik eten / combineren?", assemble a request like
@@ -46,6 +48,13 @@ Report only known available foods/supplements, surface warnings, and do not pres
 supplements as medical treatment.
 
 ### Phase 4 — Advice (interpret the JSON, in Dutch)
+- **fitstrong** → headline score /100 + band ("hoe fit & strong ben je nu") and the
+  `improvements` list ("wat kan beter", worst-first). Stress it is **indicatief, geen
+  gevalideerde fitness-meting**.
+- **daily_scheme** → present the day plan + `coverage`%; read out any `notes` (e.g. doel
+  niet gehaald uit DB). Indicatief, geen voorschrift.
+- For a shareable artefact: generate `--html report.html` (offline rapport) or
+  `--video-props` → render via `video/` (Remotion, optioneel; needs `npm install`).
 - **macro_targets** → present protein (g), carb band (g, moderate/intensive) and energy
   range. Add pre/post-workout timing (pre 1–2 g/kg carbs low-FODMAP; post 25 g eiwit +
   ~40 g snelle koolhydraten).

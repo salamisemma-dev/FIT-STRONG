@@ -1,0 +1,12 @@
+{
+  "week_label": "Week 1",
+  "score": 66.8,
+  "band": "goed",
+  "subscores": { "protein": 78.1, "energy": 83.3, "microbiome": 60.0, "fodmap": 64.4, "training": 100.0, "symptoms": 20.0 },
+  "top_improvements": [
+    { "area": "symptoms", "score": 20.0, "action": "Houd klachten bij en test triggers; bij aanhoudende klachten een diëtist raadplegen." },
+    { "area": "microbiome", "score": 60.0, "action": "Bouw vezels/prebiotica op uit darmvriendelijke bronnen (havermout, courgette, wortel)." },
+    { "area": "fodmap", "score": 64.4, "action": "Verlaag de FODMAP-belasting per maaltijd; spreid hoog-FODMAP voeding." }
+  ],
+  "disclaimer": "Dit advies is indicatief en geen medisch advies. Bij aanhoudende klachten of alarmsignalen: raadpleeg een (sport)diëtist of arts."
+}

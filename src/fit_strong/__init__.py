@@ -12,7 +12,11 @@ from .algorithms.fodmap_load import (
 from .algorithms.macro_targets import MacroTargets, compute_macro_targets
 from .algorithms.microbiome_score import MicrobiomeScore, microbiome_score
 from .algorithms.trigger_detection import TriggerScore, detect_triggers
+from .algorithms.fitstrong_score import FitStrongScore, Improvement, fitstrong_score
+from .algorithms.daily_scheme import DailyScheme, SchemeMeal, daily_scheme
 from .engine import DISCLAIMER, Report, generate_report
+from .report_html import render_html
+from .video_props import weekly_video_props
 from .food_db import load_food_db
 from .combinations import (
     CombinationRecommendation,
@@ -49,6 +53,9 @@ __all__ = [
     "check_energy_balance",
     "microbiome_score", "MicrobiomeScore",
     "generate_report", "Report", "DISCLAIMER",
+    "fitstrong_score", "FitStrongScore", "Improvement",
+    "daily_scheme", "DailyScheme", "SchemeMeal",
+    "render_html", "weekly_video_props",
     "load_food_db",
     "SupplementRef", "CombinationRule", "CombinationRecommendation",
     "load_supplement_db", "load_combination_rules", "recommend_combination",

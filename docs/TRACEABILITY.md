@@ -83,6 +83,32 @@ tests` to execute every method named here.
 | `run(...)` does not mutate parsed diary | `test_run_does_not_mutate_loaded_diary` |
 | Source DB and packaged copy are content-identical | `test_food_db_source_and_packaged_copy_are_identical` + `bob_validate.mjs` library drift gate |
 
+## spec-fitstrong-score → `tests/test_fitstrong_score.py`
+| Criterion | Test method |
+|---|---|
+| Energy subscore in-range / below / above branches | `test_energy_in_range_below_above` |
+| Weights renormalise when components absent | `test_weight_renormalisation_when_components_absent` |
+| Band thresholds + improvements sorted worst-first | `test_band_thresholds_and_improvements_sorted` |
+| Microbiome/FODMAP/training/symptoms components | `test_microbiome_and_fodmap_and_training_components` |
+| Deterministic | `test_deterministic` |
+
+## spec-daily-scheme → `tests/test_daily_scheme.py`
+| Criterion | Test method |
+|---|---|
+| High-FODMAP excluded when sensitive | `test_high_fodmap_excluded_when_sensitive` |
+| Not force-dropped when not sensitive (+ indicatief note) | `test_high_fodmap_allowed_when_not_sensitive` |
+| `exclude_ids` honoured | `test_exclude_ids_honoured` |
+| Coverage + totals present, 3 meals | `test_coverage_and_totals_present` |
+| Empty DB → honest note | `test_empty_db_note` |
+| Deterministic | `test_deterministic` |
+
+## spec-report-artifacts → `tests/test_report_artifacts.py`
+| Criterion | Test method |
+|---|---|
+| HTML self-contained (score, disclaimer, scheme row, no external assets) | `test_render_html_self_contained` |
+| HTML without scheme omits scheme section | `test_render_html_without_scheme` |
+| `weekly_video_props` JSON-serialisable, ≤3 improvements | `test_weekly_video_props_json_serialisable` |
+
 ## Backlog (toward machine-enforced clause traceability)
 Annotate each test with its spec-clause id (e.g. a `# trace: spec-macro-targets/protein`
 marker) and extend `bob_validate.mjs` to assert every enumerated clause has ≥1 matching

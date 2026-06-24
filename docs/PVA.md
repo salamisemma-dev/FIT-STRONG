@@ -10,11 +10,10 @@ SCFA, FODMAP-restrictie, trainingsbelasting.
 
 **In scope (deze build):** pure rekenkern (macro-targets, FODMAP-load, triggerdetectie,
 energiebalans, microbioom-score), getypte datamodellen, referentie-voedingsdatabase,
-CLI, Claude-skill wrapper, uitgebreide voeding-/supplementbibliotheek en combinatie-engine. BOB-proof: constitution + 9 specs + strikte validator + 52
-tests.
+CLI, Claude-skill wrapper, uitgebreide voeding-/supplementbibliotheek en combinatie-engine, **Fit&Strong-score + dagschema-generator + gap-analyse**, **self-contained HTML-rapport** en **optionele Remotion weekvideo** (geïsoleerd subproject). BOB-proof: constitution + 12 specs + strikte validator + 66 tests.
 
-**Buiten scope (roadmap):** web-frontend (Next.js), persistentie (Postgres/RLS), auth,
-notificaties, ML-modellen. De engine blijft vrij van die zorgen zodat ze later als
+**Buiten scope (roadmap):** stateful web-frontend (Next.js), persistentie (Postgres/RLS), auth,
+notificaties, multi-dag trend, ML-modellen. De engine blijft vrij van die zorgen zodat ze later als
 laag erbovenop kunnen.
 
 ## 2. Architectuur
@@ -34,6 +33,8 @@ gedocumenteerd met bron in de bijbehorende spec (geen "magic numbers").
 | V5 | Engine los van UI/DB → frontend & persistentie later inplugbaar zonder herschrijven. | |
 | V6 | Nieuwe combinatiebibliotheek maakt proactief advies mogelijk: niet alleen achteraf analyseren, maar ook maaltijden/supplementen samenstellen uit beschikbare items. | |
 | V7 | Data blijft package-safe: config is bron, package-data is mirror, validator bewaakt drift voor food/supplement/rules. | |
+| V8 | Beantwoordt nu de echte vraag ("hoe fit & strong ben ik + wat beter") via composite-score + gap-analyse + dagschema, en levert een **leesbaar self-contained HTML-rapport** (offline, zero deps). UI zonder de engine dependency-vuil binnen te halen. | |
+| V9 | Video bewust geïsoleerd in `video/` (eigen deps); engine heeft nooit Node nodig. Juiste medium-keuze: rapport = kern, video = optionele recap. | |
 
 | # | Nadeel | Fix (toegepast in deze build) |
 |---|--------|-------------------------------|
@@ -52,6 +53,9 @@ gedocumenteerd met bron in de bijbehorende spec (geen "magic numbers").
 | N13 | **Supplement-dosering was inconsistent** (`safe_dose_g`, `safe_dose_mg`, string `safe_dose`) → broos advies. | **Gefixt:** DB genormaliseerd naar `safe_dose: {amount, unit, note}`; loader accepteert dit als contract en tests checken dose-output. |
 | N14 | **Combinatieregels als vrije strings** konden later richting onveilige `eval` of onduidelijke parser groeien. | **Gefixt:** regels gebruiken declaratieve predicates (`meal_timing`, `*_gt`, `*_lt`, booleans); engine evalueert alleen een kleine allowlist. |
 | N15 | **Bronclaims van aangeleverde items zijn breed** (Monash/NEVO/ISSN zonder exacte editie/URL per item). | **Beheerst:** `source` is metadata, geen harde medische claim; PvA/EVIDENCE blijven eerlijk dat exacte bronpinning en Monash-portiedata roadmap zijn. |
+| N17 | **Fit&Strong-score suggereert valse precisie** — één getal kan als gevalideerde fitness-meting gelezen worden. | **Beheerst:** score expliciet als heuristiek/indicatief gelabeld (band-tekst + disclaimer + `docs/EVIDENCE.md` confidence=Hypothesis voor gewichten). Subscores tonen herkomst; geen diagnose. Validatie = roadmap. |
+| N18 | **Remotion weekvideo is een scaffold** — niet `npm install`-ed of gerenderd in deze omgeving → risico op "lijkt af, is niet getest". | **Eerlijk gelabeld:** `video/README.md` zegt expliciet scaffold + render-stappen; de **Python-props (`weekly_video_props`) zijn wél getest**. mp4-render vereist `npm install` + `npm run render` lokaal. |
+| N19 | **Dagschema kan targets niet halen** uit een kleine food-DB → misleidend "compleet" plan. | **Gefixt:** `coverage`-percentages + expliciete `notes` als eiwit/energie <80% ("doel niet gehaald, breid DB uit"). Geen stille pretentie van dekking. |
 | N16 | **Twee voorbeeld-requests (`sample_high_protein_meal`, `sample_supplement_stack`) gaven stil leeg resultaat** — engine las alleen `available_foods`/`available_supplements` als id-string-lijsten, niet de meal/stack-objectvorm → misleidende voorbeelden. | **Gefixt:** `recommend_combination` accepteert nu `available_foods`/`foods` én `available_supplements`/`supplements`, elk als id-string of `{id\|name, amount_g}`; opgegeven `amount_g` wordt gehonoreerd i.p.v. default safe-portion. Een gevulde request valt nooit meer stil weg door zijn vorm. Regressietest `test_accepts_object_request_shapes`. |
 
 ## 4. Roadmap (buiten deze sessie)
@@ -63,9 +67,10 @@ gedocumenteerd met bron in de bijbehorende spec (geen "magic numbers").
 5. Notificatie-service (dagboek-reminders).
 
 ## 5. Definition of Done (deze build) — gehaald
-- [x] Constitution + 9 approved specs, strikte validator groen.
-- [x] Pure engine + modellen + CLI + food/supplement/rules bibliotheek.
-- [x] 52 tests groen (`unittest`, stdlib).
-- [x] CLI end-to-end op voorbeelddagboek.
+- [x] Constitution + 12 approved specs, strikte validator groen.
+- [x] Pure engine + modellen + CLI + food/supplement/rules bibliotheek + score/scheme/rapport.
+- [x] 66 tests groen (`unittest`, stdlib).
+- [x] CLI end-to-end op voorbeelddagboek + HTML-rapport + video-props.
+- [x] Self-contained HTML-rapport (8 secties, zero externe assets) + Remotion video-scaffold.
 - [x] Claude-skill wrapper.
 - [x] Elk geïdentificeerd nadeel gefixt of expliciet beheerst.

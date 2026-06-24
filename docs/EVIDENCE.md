@@ -24,6 +24,7 @@ of the underlying science, that is stated — not hidden.
 | Fibre target 30 g/day (`microbiome_score.py`) | | EFSA Dietary Reference Values for carbohydrates & fibre, 2010 (≥25 g/day adequate); Gezondheidsraad *Richtlijnen goede voeding* 2015 (~30 g/day, 14 g/1000 kcal). | **Strong** | Population target; athletes' needs may differ. |
 | Prebiotic-points anchor 20 pts; 0–10 per-food `prebiotic_score` (`microbiome_score.py`) | | Heuristic encoding of prebiotic/fermentable-fibre richness. | **Hypothesis** | Per-food scores are expert-estimate, not lab values; the 0–100 score is explicitly **indicative**. |
 | Gut–muscle axis / *Roseburia inulinivorans* ↔ grip strength | rationale for prebiotic emphasis | Reported in the source blueprint (LUMC/Granada/Almería line of work). | **Hypothesis** | Not independently verified in this repo. Motivates the prebiotic score only; drives **no** clinical/medical advice. |
+| Fit & Strong composite weights (`fitstrong_score.py`): protein .25 · energy .20 · microbiome .20 · fodmap .15 · training .10 · symptoms .10; band cuts 40/60/80; improvement cut 70; FODMAP day-cap 45 g; training target 5 h/wk | | Editorial heuristic combining the cited subscore inputs into one headline number. | **Hypothesis** | The **weighting and the composite itself are not validated**. It is a motivational summary, not a diagnosis or fitness measurement. Subscore *inputs* carry their own confidence (rows above). |
 
 ## What this does NOT claim
 - It is **not** a validated clinical decision tool. All output is indicative (constitution §4).
