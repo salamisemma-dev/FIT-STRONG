@@ -12,3 +12,6 @@ node_modules/
 video/out/
 video/props.json
 *.local.html
+
+# Office lock/temp files
+~$*

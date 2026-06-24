@@ -73,6 +73,36 @@ De app exporteert hetzelfde shape als de CLI nu leest:
 | N9 | Dagboek vergeten. | Zachte reminder en incomplete-dag status; geen straf of streak-pressure. |
 | N10 | Verschil man/vrouw kan te binair worden. | Onboarding heeft man/vrouw/anders; cyclusmodule is losse opt-in feature, niet afgeleid uit geslacht. |
 
+## 5b. Brutale review — nadelen die het oorspronkelijke plan miste (met fix)
+
+| # | Nadeel (eerlijk) | Fix |
+|---|------------------|-----|
+| N11 | **3D-motion vs leek-snelheid/perf.** Zware motion botst met "lage drempel" en laat low-end telefoons haperen; kan first-use vertragen. | Motion = puur decoratieve laag. Alleen GPU-goedkope `transform`/`opacity` (geen layout/box-shadow-animatie in lijsten). Lazy scroll-reveal. Motion blokkeert nooit input. `prefers-reduced-motion` = volledige kill-switch (zit al in de prototype). |
+| N12 | **Engine is Python; de browser kan hem niet draaien.** "Export JSON → draai CLI" geeft een leek géén rapport in de app — de kern-belofte ("hoe fit ben ik") werkt niet in-app. **Grootste eerlijkheidsgat.** | MVP eerlijk: app = invoer + export, rapport via CLI (door jou). Echt in-app rapport vereist óf de scoring/report-logica geport naar JS, óf een kleine hosted endpoint die de Python-engine draait. Expliciet als **roadmap** gelabeld; niet doen alsof MVP dit al kan. |
+| N13 | **Portie→gram conversie ontbreekt.** Plan zegt "later converteren met onzekerheidslabel" maar er is geen tabel; zonder gram kan de engine macro's niet schatten. | Lever een huishoudmaat→gram tabel als **data** (per categorie: glas=250 ml, schep=30 g, handje noten=20 g, …), met `estimated:true` vlag in de JSON zodat downstream weet dat het een schatting is. |
+| N14 | **Toegankelijkheid** (motion, contrast, gezondheidscontext). | WCAG-AA contrast, `prefers-reduced-motion`, toetsenbord/focus, schaalbare tekst, geen kleur-alleen-betekenis (FODMAP-tags ook tekst). |
+| N15 | **Schema-drift app↔engine.** App-JSON moet exact matchen met wat de CLI leest; nu geen gate. | Publiceer een JSON Schema voor de diary, voeg `fit-strong --validate-diary <file>` toe en een CI-check; de app valideert vóór export. |
+| N16 | **3D-tilt/parallax kan op touch niet werken of misselijk maken.** Hover-tilt bestaat niet op mobiel; parallax kan vestibulaire klachten geven. | Tilt alleen op pointer/hover-capable devices (`@media (hover:hover)`); op touch een subtiele press-scale. Parallax beperkt + uit bij reduced-motion. |
+
+## 9. Visuele richting — hyperflow & 3D motion
+
+Geïnspireerd op de SALAMIS- en saldiapp brand-designs. **Concreet prototype:** [`app/prototype/index.html`](../app/prototype/index.html) (self-contained, offline, zero deps) — het "Vandaag"-scherm met de volledige richting.
+
+**Designtokens (uit de brand-HTML's):**
+- Achtergrond cyber-dark `#060810`; glas-surfaces (`rgba(255,255,255,.04–.07)`, `backdrop-filter: blur`).
+- Primair indigo `#4361EE` → paars `#6d28d9`/`#BD93F9`; accent cyaan `#66FCF1` + groen `#39FF86` (score), roze `#FF00B4`, goud `#FFD166`, koraal `#FF6B6B` (waarschuwing).
+- Type: Inter (UI) + JetBrains Mono (cijfers/specs).
+- Easings: cinema `cubic-bezier(.16,1,.3,1)`, snap `cubic-bezier(.34,1.56,.64,1)`.
+
+**Hyperflow-motion-vocabulaire:**
+- Drijvende radiale **orbs** + fijne **grain**-overlay als levende achtergrond.
+- **Scroll-reveal** (IntersectionObserver, fade-up) per sectie.
+- **Floating/3D-tilt** kaarten (hover-tilt op pointer-devices, press-scale op touch).
+- **Glassmorphism** nav + bottom-sheet; geanimeerde **score-ring** (SVG stroke-dashoffset).
+- Gradient-glow accenten; alles **GPU-goedkoop** en **uit bij `prefers-reduced-motion`**.
+
+**Niet-onderhandelbaar:** motion mag de leek-snelheid nooit schaden. De data-laag (invoer→export→engine) werkt identiek met motion volledig uit.
+
 ## 6. Technische aanpak
 
 **Aanbevolen MVP:** lokale webapp of PWA.

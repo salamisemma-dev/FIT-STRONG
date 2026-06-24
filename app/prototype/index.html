@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fit &amp; Strong — Vandaag (prototype)</title>
+<!--
+  DESIGN PROTOTYPE — niet de echte app, geen engine-koppeling.
+  Toont de hyperflow/3D-motion richting (geïnspireerd op saldiapp/SALAMIS brand designs)
+  voor het 'Vandaag'-scherm. Self-contained, offline, zero deps. Respecteert
+  prefers-reduced-motion. Buttons zijn demo (geen opslag).
+-->
+<style>
+  :root{
+    --bg:#060810; --bg2:#0c1020; --surface:rgba(255,255,255,.04); --surface2:rgba(255,255,255,.07);
+    --border:rgba(255,255,255,.10); --ink:#eef1f8; --muted:#8b92a8;
+    --primary:#4361EE; --primary-lt:#6d28d9; --cyan:#66FCF1; --green:#39FF86;
+    --purple:#BD93F9; --pink:#FF00B4; --gold:#FFD166; --coral:#FF6B6B;
+    --ease-cinema:cubic-bezier(.16,1,.3,1); --ease-snap:cubic-bezier(.34,1.56,.64,1);
+    --r:18px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);
+    color:var(--ink);overflow-x:hidden;min-height:100vh;line-height:1.5;-webkit-font-smoothing:antialiased}
+
+  /* ---- hyperflow background: drifting orbs + grain ---- */
+  .orbs{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+  .orb{position:absolute;border-radius:50%;filter:blur(70px);opacity:.5}
+  .orb1{width:46vw;height:46vw;left:-10vw;top:-8vw;background:radial-gradient(circle,var(--primary),transparent 70%);animation:orb1 18s var(--ease-cinema) infinite alternate}
+  .orb2{width:40vw;height:40vw;right:-12vw;top:18vh;background:radial-gradient(circle,var(--purple),transparent 70%);animation:orb2 22s var(--ease-cinema) infinite alternate}
+  .orb3{width:38vw;height:38vw;left:30vw;bottom:-14vw;background:radial-gradient(circle,var(--cyan),transparent 70%);opacity:.28;animation:orb3 26s var(--ease-cinema) infinite alternate}
+  @keyframes orb1{to{transform:translate(8%,10%) scale(1.12)}}
+  @keyframes orb2{to{transform:translate(-9%,-6%) scale(1.1)}}
+  @keyframes orb3{to{transform:translate(-6%,-8%) scale(1.15)}}
+  .grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.04;mix-blend-mode:overlay;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+  .wrap{position:relative;z-index:2;max-width:460px;margin:0 auto;padding:0 16px 120px}
+
+  /* ---- glass nav ---- */
+  nav{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;
+    padding:14px 4px;margin-bottom:8px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.5px}
+  .logo{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--primary),var(--purple));
+    display:grid;place-items:center;box-shadow:0 6px 18px rgba(67,97,238,.45);font-size:16px}
+  .date{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+  .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s var(--ease-cinema),transform .7s var(--ease-cinema)}
+  .reveal.vis{opacity:1;transform:none}
+
+  /* ---- hero score ring ---- */
+  .hero{text-align:center;padding:18px 0 10px}
+  .ring-wrap{position:relative;width:200px;height:200px;margin:6px auto 4px;animation:float 7s var(--ease-cinema) infinite}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+  .ring-glow{position:absolute;inset:18px;border-radius:50%;background:radial-gradient(circle,rgba(57,255,134,.25),transparent 70%);filter:blur(14px)}
+  .score-num{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+  .score-num b{font-size:52px;font-weight:800;background:linear-gradient(135deg,var(--cyan),var(--green));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+  .score-num span{font-size:12px;color:var(--muted);letter-spacing:2px;text-transform:uppercase}
+  .band{display:inline-block;margin-top:8px;font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+    color:var(--green);padding:5px 14px;border-radius:100px;background:rgba(57,255,134,.10);border:1px solid rgba(57,255,134,.3)}
+  .hero-sub{font-size:13px;color:var(--muted);margin-top:10px}
+
+  /* ---- progress ---- */
+  .progress{display:flex;gap:8px;margin:18px 0 6px}
+  .pcell{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:10px 8px;text-align:center}
+  .pcell .v{font-size:18px;font-weight:800}
+  .pcell .l{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:2px}
+  .pbar{height:4px;border-radius:4px;background:rgba(255,255,255,.08);margin-top:8px;overflow:hidden}
+  .pbar i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,var(--cyan),var(--green))}
+
+  h2.sec{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin:26px 4px 12px}
+
+  /* ---- big leek-friendly action buttons (3D tilt + float) ---- */
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .act{position:relative;border:1px solid var(--border);border-radius:var(--r);padding:18px 14px;cursor:pointer;
+    background:var(--surface);color:var(--ink);text-align:left;font:inherit;overflow:hidden;
+    transition:transform .35s var(--ease-snap),box-shadow .35s var(--ease-cinema),border-color .35s;
+    transform-style:preserve-3d}
+  .act:hover{transform:translateY(-4px) rotateX(6deg) rotateY(-4deg);box-shadow:0 16px 40px rgba(0,0,0,.45);border-color:rgba(102,252,241,.45)}
+  .act:active{transform:translateY(-1px) scale(.99)}
+  .act .ico{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;font-size:20px;margin-bottom:12px;
+    background:linear-gradient(135deg,var(--primary),var(--purple))}
+  .act .t{font-weight:700;font-size:15px}
+  .act .d{font-size:11px;color:var(--muted);margin-top:2px}
+  .act.b2 .ico{background:linear-gradient(135deg,#16a34a,var(--green))}
+  .act.b3 .ico{background:linear-gradient(135deg,#d97706,var(--gold))}
+  .act.b4 .ico{background:linear-gradient(135deg,#db2777,var(--pink))}
+  .act.b5 .ico{background:linear-gradient(135deg,#0891b2,var(--cyan))}
+  .act.b6 .ico{background:linear-gradient(135deg,#7c3aed,var(--purple))}
+
+  /* ---- today timeline ---- */
+  .tl{margin-top:10px;display:flex;flex-direction:column;gap:10px}
+  .item{display:flex;gap:12px;align-items:center;background:var(--surface);border:1px solid var(--border);
+    border-radius:14px;padding:12px 14px}
+  .item .time{font-size:12px;color:var(--cyan);font-variant-numeric:tabular-nums;width:42px;flex-shrink:0}
+  .item .main{flex:1}
+  .item .main b{font-size:14px}
+  .item .main p{font-size:12px;color:var(--muted)}
+  .tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;padding:3px 8px;border-radius:100px}
+  .tag.low{background:rgba(57,255,134,.12);color:var(--green)}
+  .tag.hi{background:rgba(255,107,107,.14);color:var(--coral)}
+  .tag.unk{background:rgba(139,146,168,.16);color:var(--muted)}
+
+  /* ---- floating action + sheet ---- */
+  .fab{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:60;border:none;cursor:pointer;
+    font:inherit;font-weight:700;color:#fff;padding:15px 28px;border-radius:100px;
+    background:linear-gradient(135deg,var(--primary),var(--purple));box-shadow:0 10px 30px rgba(67,97,238,.5);
+    transition:transform .3s var(--ease-snap),box-shadow .3s}
+  .fab:hover{transform:translateX(-50%) translateY(-3px);box-shadow:0 16px 40px rgba(67,97,238,.65)}
+  .sheet-bg{position:fixed;inset:0;z-index:70;background:rgba(3,4,10,.6);backdrop-filter:blur(6px);
+    opacity:0;pointer-events:none;transition:opacity .3s}
+  .sheet-bg.open{opacity:1;pointer-events:auto}
+  .sheet{position:fixed;left:0;right:0;bottom:0;z-index:71;max-width:460px;margin:0 auto;
+    background:var(--bg2);border:1px solid var(--border);border-radius:24px 24px 0 0;padding:22px 18px 30px;
+    transform:translateY(110%);transition:transform .45s var(--ease-cinema)}
+  .sheet.open{transform:none}
+  .sheet h3{font-size:18px;margin-bottom:4px}
+  .sheet p{font-size:13px;color:var(--muted);margin-bottom:16px}
+  .qchips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font:inherit;font-size:13px;cursor:pointer;color:var(--ink);background:var(--surface2);
+    border:1px solid var(--border);border-radius:100px;padding:9px 14px;transition:all .2s var(--ease-snap)}
+  .chip:hover{border-color:var(--cyan);transform:scale(1.05)}
+  .grip{width:40px;height:4px;border-radius:4px;background:rgba(255,255,255,.2);margin:0 auto 16px}
+
+  .disc{font-size:11px;color:var(--muted);text-align:center;margin-top:30px;line-height:1.6}
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none!important;scroll-behavior:auto!important}
+    .reveal{opacity:1;transform:none;transition:none}
+    .act:hover{transform:none}
+  }
+</style>
+</head>
+<body>
+<div class="orbs" aria-hidden="true"><div class="orb orb1"></div><div class="orb orb2"></div><div class="orb orb3"></div></div>
+<div class="grain" aria-hidden="true"></div>
+
+<div class="wrap">
+  <nav>
+    <div class="brand"><div class="logo">⚡</div> Fit &amp; Strong</div>
+    <div class="date" id="today">Vandaag</div>
+  </nav>
+
+  <section class="hero reveal">
+    <div class="ring-wrap">
+      <div class="ring-glow"></div>
+      <svg width="200" height="200" viewBox="0 0 200 200">
+        <circle cx="100" cy="100" r="86" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="14"/>
+        <circle id="ring" cx="100" cy="100" r="86" fill="none" stroke="url(#g)" stroke-width="14"
+          stroke-linecap="round" stroke-dasharray="540" stroke-dashoffset="540" transform="rotate(-90 100 100)"/>
+        <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#66FCF1"/><stop offset="1" stop-color="#39FF86"/></linearGradient></defs>
+      </svg>
+      <div class="score-num"><b id="snum">0</b><span>/ 100</span></div>
+    </div>
+    <div class="band">Goed bezig</div>
+    <p class="hero-sub">Indicatief, geen medische meting. 4 van 5 dagdelen ingevuld.</p>
+  </section>
+
+  <div class="progress reveal">
+    <div class="pcell"><div class="v">3</div><div class="l">Eten</div><div class="pbar"><i style="width:75%"></i></div></div>
+    <div class="pcell"><div class="v">1</div><div class="l">Klacht</div><div class="pbar"><i style="width:40%"></i></div></div>
+    <div class="pcell"><div class="v">1</div><div class="l">Training</div><div class="pbar"><i style="width:100%"></i></div></div>
+    <div class="pcell"><div class="v">7u</div><div class="l">Slaap</div><div class="pbar"><i style="width:88%"></i></div></div>
+  </div>
+
+  <h2 class="sec reveal">Snel toevoegen</h2>
+  <div class="grid reveal">
+    <button class="act b1" onclick="openSheet('Ontbijt')"><div class="ico">🥣</div><div class="t">Ontbijt</div><div class="d">tijd · product · portie</div></button>
+    <button class="act b2" onclick="openSheet('Lunch')"><div class="ico">🥗</div><div class="t">Lunch</div><div class="d">tijd · product · portie</div></button>
+    <button class="act b3" onclick="openSheet('Avondeten')"><div class="ico">🍽️</div><div class="t">Avondeten</div><div class="d">tijd · product · portie</div></button>
+    <button class="act b4" onclick="openSheet('Klacht')"><div class="ico">🩺</div><div class="t">Klacht</div><div class="d">Bristol · pijn · energie</div></button>
+    <button class="act b5" onclick="openSheet('Drank')"><div class="ico">💧</div><div class="t">Drank</div><div class="d">water · koffie · thee</div></button>
+    <button class="act b6" onclick="openSheet('Training')"><div class="ico">🏋️</div><div class="t">Training</div><div class="d">type · duur · zwaarte</div></button>
+  </div>
+
+  <h2 class="sec reveal">Vandaag gelogd</h2>
+  <div class="tl reveal">
+    <div class="item"><div class="time">10:00</div><div class="main"><b>Havermout + banaan + zaden</b><p>1 kom · ~80 g havermout</p></div><span class="tag low">Laag</span></div>
+    <div class="item"><div class="time">13:00</div><div class="main"><b>Witte rijst + kipfilet + ui</b><p>bord · gebakken uitjes</p></div><span class="tag hi">Hoog</span></div>
+    <div class="item"><div class="time">16:00</div><div class="main"><b>Buikpijn 6 · opgeblazen 7</b><p>±3 u na lunch</p></div><span class="tag unk">Klacht</span></div>
+    <div class="item"><div class="time">18:00</div><div class="main"><b>Krachttraining</b><p>60 min · intensiteit 7/10</p></div><span class="tag low">Training</span></div>
+  </div>
+
+  <p class="disc">Prototype-weergave. Indicatief hulpmiddel, geen medisch advies. Bij aanhoudende klachten: raadpleeg een (sport)diëtist of arts.</p>
+</div>
+
+<button class="fab" onclick="openSheet('Maaltijd')">+ Toevoegen</button>
+
+<div class="sheet-bg" id="sbg" onclick="closeSheet()"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-label="Toevoegen">
+  <div class="grip"></div>
+  <h3 id="sheet-title">Toevoegen</h3>
+  <p>Kies een favoriet of typ zelf. Hoeveelheid mag portie, stuk, glas of handje — onbekend mag leeg.</p>
+  <div class="qchips">
+    <button class="chip">🔁 Herhaal gisteren</button>
+    <button class="chip">🥣 Havermout</button>
+    <button class="chip">🍗 Kipfilet</button>
+    <button class="chip">🍚 Rijst</button>
+    <button class="chip">🥦 Broccoli</button>
+    <button class="chip">🐟 Zalm</button>
+    <button class="chip">+ Zelf typen</button>
+  </div>
+</div>
+
+<script>
+  // date
+  document.getElementById('today').textContent =
+    new Date().toLocaleDateString('nl-NL',{weekday:'short',day:'numeric',month:'short'});
+
+  // scroll-reveal (hyperflow)
+  const io = new IntersectionObserver((es)=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis')}),{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  // animate score ring to 74
+  const target=74, ring=document.getElementById('ring'), snum=document.getElementById('snum');
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function paint(v){const len=2*Math.PI*86;ring.setAttribute('stroke-dasharray',len);ring.style.strokeDashoffset=len-(len*v/100);snum.textContent=Math.round(v);}
+  if(reduce){paint(target);} else {let v=0;const t=setInterval(()=>{v+=2;if(v>=target){v=target;clearInterval(t);}paint(v);},16);}
+
+  // bottom sheet
+  const sheet=document.getElementById('sheet'),sbg=document.getElementById('sbg');
+  function openSheet(title){document.getElementById('sheet-title').textContent=title;sheet.classList.add('open');sbg.classList.add('open');}
+  function closeSheet(){sheet.classList.remove('open');sbg.classList.remove('open');}
+  addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet();});
+</script>
+</body>
+</html>
