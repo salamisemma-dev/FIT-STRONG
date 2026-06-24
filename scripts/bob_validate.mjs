@@ -52,7 +52,8 @@ for (const f of [join(ROOT, 'constitution.md'), ...walk(join(ROOT, 'specs'))].fi
 const specs = walk(join(ROOT, 'specs')).filter((f) => f.endsWith('.spec.md'));
 if (specs.length === 0) errors.push('No specs found under specs/**.');
 
-const REQUIRED_KEYS = ['id', 'type', 'version', 'status', 'owner'];
+const REQUIRED_KEYS = ['id', 'type', 'version', 'status', 'owner', 'depends_on', 'consumed_by'];
+const ids = new Map();
 const PATH_RE = /((?:tests|scripts|specs|supabase|src|app|shared|core|lib)\/[A-Za-z0-9_./-]+)/g;
 
 for (const file of specs) {
@@ -66,8 +67,18 @@ for (const file of specs) {
       errors.push(`${rel}: frontmatter missing "${key}".`);
     }
   }
+  const id = (fm[1].match(/^id:\s*(\S+)/m) || [])[1];
+  if (id) {
+    if (ids.has(id)) errors.push(`${rel}: duplicate spec id "${id}" also used by ${ids.get(id)}.`);
+    ids.set(id, rel);
+  }
+  const version = (fm[1].match(/^version:\s*(\S+)/m) || [])[1];
+  if (version && !/^\d+\.\d+\.\d+$/.test(version)) errors.push(`${rel}: version "${version}" is not semver (expected x.y.z).`);
   const status = (fm[1].match(/^status:\s*(\S+)/m) || [])[1];
-  if (status && status !== 'approved') warnings.push(`${rel}: status is "${status}" (not approved).`);
+  if (status && status !== 'approved') {
+    const msg = `${rel}: status is "${status}" (not approved).`;
+    (strict ? errors : warnings).push(msg);
+  }
 
   const ver = text.match(/##\s*Verification([\s\S]*?)(\n##\s|\s*$)/);
   if (!ver) { errors.push(`${rel}: missing "## Verification" section.`); continue; }
@@ -77,12 +88,43 @@ for (const file of specs) {
   }
 }
 
+for (const file of specs) {
+  const rel = file.slice(ROOT.length + 1).replace(/\\/g, '/');
+  const fm = read(file).match(/^---\n([\s\S]*?)\n---/);
+  if (!fm) continue;
+  const depends = (fm[1].match(/^depends_on:\s*\[([^\]]*)\]/m) || [])[1];
+  if (!depends) continue;
+  for (const dep of depends.split(',').map((v) => v.trim()).filter(Boolean)) {
+    if (!ids.has(dep)) errors.push(`${rel}: depends_on unknown spec id "${dep}".`);
+  }
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // PROJECT-SPECIFIC DRIFT CHECKS — add yours below (schema↔code, naming, etc.).
-// Example pattern (uncomment + adapt):
-//   const dream = existsSync(join(ROOT,'src/cron/nightlyDream.ts')) && read(join(ROOT,'src/cron/nightlyDream.ts'));
-//   if (dream) { /* assert columns/invariants */ }
 // ─────────────────────────────────────────────────────────────────────────────
+
+// Food-DB mirror: spec-cli-packaging declares config/food_db.json the editable source
+// and src/fit_strong/data/food_db.json the install-safe copy. Nothing else keeps them
+// in sync, so enforce content-identity (CRLF-normalised) here — they HAD drifted by
+// line-endings until this gate was added.
+{
+  const srcDb = join(ROOT, 'config', 'food_db.json');
+  const pkgDb = join(ROOT, 'src', 'fit_strong', 'data', 'food_db.json');
+  if (existsSync(srcDb) && existsSync(pkgDb)) {
+    const norm = (p) => JSON.stringify(JSON.parse(read(p)));  // parse so formatting/EOL never false-fail
+    try {
+      if (norm(srcDb) !== norm(pkgDb)) {
+        errors.push('Food-DB drift: config/food_db.json and src/fit_strong/data/food_db.json differ. '
+          + 'config/ is the source — copy it into the package data (spec-cli-packaging).');
+      }
+    } catch (e) {
+      errors.push(`Food-DB parse error in one of the food_db.json copies: ${e.message}`);
+    }
+  } else if (existsSync(srcDb) !== existsSync(pkgDb)) {
+    errors.push('Food-DB mirror incomplete: exactly one of config/food_db.json '
+      + 'or src/fit_strong/data/food_db.json exists (spec-cli-packaging requires both).');
+  }
+}
 
 for (const w of warnings) console.warn(`⚠️  ${w}`);
 if (errors.length) {

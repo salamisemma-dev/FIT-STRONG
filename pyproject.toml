@@ -18,4 +18,4 @@ fit-strong = "fit_strong.cli:main"
 where = ["src"]
 
 [tool.setuptools.package-data]
-fit_strong = []
+fit_strong = ["data/*.json"]

@@ -1,7 +1,7 @@
 ---
 id: spec-trigger-detection
 type: transformation
-version: 1.0
+version: 1.0.0
 status: approved
 owner: fit-strong-core
 depends_on: [spec-models, spec-fodmap-load]
@@ -20,14 +20,12 @@ pain_threshold=4.0, top_n=3) -> list[TriggerScore]` in
 
 - For each meal, find symptoms whose `recorded_at` is in
   `[meal.recorded_at + window_start_h, meal.recorded_at + window_end_h]`.
-- A symptom "counts" when `abdominal_pain >= pain_threshold` (bloating used as
-  tie-breaker if pain is None).
+- A symptom "counts" when the max of `abdominal_pain` and `bloating` is >= `pain_threshold`; missing values count as 0.
 - Each food item in a counting meal accrues
   `score += pain_value * suspicion(item.fodmap_level)` where
-  `suspicion = {high:1.0, medium:0.6, low:0.3, very_low:0.1}`. This is the fix for the
+  `suspicion = {high:1.0, medium:0.6, low:0.3, very_low:0.1}`. Very-low or `low_fodmap` items are suppressed from FODMAP-trigger output. This is the fix for the
   "innocent bystander" failure mode: a low-FODMAP food sharing a meal with the real
-  culprit no longer ranks equally — high-FODMAP foods carry more suspicion, matching
-  the evidence that they are the likely triggers.
+  culprit is not reported as a FODMAP trigger.
 - Also accumulate `occurrences` (number of counting windows the food appeared in) and
   the raw pains (so `avg_pain` reflects observed pain, not the weighted score).
 - `TriggerScore(food_name, score, occurrences, avg_pain)` sorted by score desc, then
@@ -49,5 +47,5 @@ elimination plan. Window/threshold changes alter which foods surface.
 
 ## Verification
 `tests/test_trigger_detection.py` — a food eaten before in-window pain ranks #1; a food
-eaten with no following symptoms scores 0; ordering & top_n cap; empty inputs; and the
-high-FODMAP food outranks an innocent low-FODMAP food sharing the same meal.
+eaten with no following symptoms scores 0; ordering & top_n cap; empty inputs; high bloating with low pain; and the
+high-FODMAP food suppresses an innocent low-FODMAP food sharing the same meal.

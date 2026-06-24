@@ -62,6 +62,31 @@ class TestEngine(unittest.TestCase):
         # no fabricated energy alerts when intake omitted
         self.assertFalse(any(a.alert_type in ("low_calories", "low_protein") for a in report.alerts))
 
+    def test_food_db_resolves_missing_fodmap_labels_for_alerts_and_triggers(self):
+        meals = [fs.Meal(BASE, "lunch", [fs.FoodItem("ui", 200)])]
+        symptoms = [fs.Symptom(BASE + timedelta(hours=3), abdominal_pain=8)]
+        report = fs.generate_report(self.client, meals, symptoms, [], self.db)
+
+        self.assertTrue(any(a.alert_type == "high_fodmap" for a in report.alerts))
+        self.assertEqual(report.triggers[0].food_name, "ui")
+        self.assertEqual(report.triggers[0].score, 8.0)
+
+    def test_safe_portion_excess_fires_even_when_synthetic_load_is_low(self):
+        db = {
+            "knoflook": fs.FoodRef("knoflook", "fructan", "high", 149, 6.4, 33, 0.5, 2.1, 10, 3),
+        }
+        meals = [fs.Meal(BASE, "dinner", [fs.FoodItem("knoflook", 5)])]
+        report = fs.generate_report(self.client, meals, [], [], db)
+
+        self.assertTrue(any(a.alert_type == "high_fodmap" for a in report.alerts))
+
+    def test_partial_bristol_events_still_alert(self):
+        report = fs.generate_report(
+            self.client, [], [], [], self.db,
+            bristol_events=[6, 7, 6, 7],
+        )
+        self.assertTrue(any(a.alert_type == "dehydration_risk" for a in report.alerts))
+
 
 if __name__ == "__main__":
     unittest.main()

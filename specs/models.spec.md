@@ -1,7 +1,7 @@
 ---
 id: spec-models
 type: schema
-version: 1.0
+version: 1.0.0
 status: approved
 owner: fit-strong-core
 depends_on: []

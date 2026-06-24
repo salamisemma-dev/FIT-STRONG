@@ -71,8 +71,11 @@ layered on later.
 ## 5. Evidence traceability
 
 Every algorithm threshold (g/kg, kcal/kg, FODMAP weights, 2–4h correlation window)
-MUST cite its source in the owning spec's **Evidence** section. A magic number with
-no spec citation is a constitution violation.
+MUST cite its source in the owning spec's **Evidence** section, and appear in
+`docs/EVIDENCE.md` with a **confidence level** (Strong / Moderate / Hypothesis) and an
+honest caveat where the value is a simplification. A magic number with no citation, or a
+claim of certainty above its evidence, is a constitution violation. Thresholds marked
+*Hypothesis* may drive only *indicative* output — never absolute medical thresholds.
 
 ---
 
@@ -80,8 +83,9 @@ no spec citation is a constitution violation.
 
 - No code without an approved spec whose **Verification** section names a real test.
 - Every spec maps to at least one test in `tests/`; the validator
-  (`scripts/bob_validate.mjs --strict .`) enforces spec→test traceability and fails CI
-  on drift.
+  (`scripts/bob_validate.mjs --strict .`) enforces spec→test traceability at file level
+  and fails CI on drift. Clause-level mapping (each acceptance criterion → test method)
+  is maintained in `docs/TRACEABILITY.md`.
 - `python -m unittest discover -s tests` MUST be green before any task is "done".
 
 ---

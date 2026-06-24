@@ -25,12 +25,28 @@ class TestEnergyBalance(unittest.TestCase):
         types = {(a.alert_type, a.severity.value) for a in alerts}
         self.assertIn(("low_protein", "critical"), types)
 
+    def test_partial_low_protein_still_alerts(self):
+        alerts = check_energy_balance(CLIENT, day_protein_g=100)
+        self.assertTrue(any(a.alert_type == "low_protein" for a in alerts))
+
+    def test_dehydration_risk_without_macro_inputs(self):
+        alerts = check_energy_balance(CLIENT, bristol_events=[6, 7, 6, 7])
+        self.assertTrue(any(a.alert_type == "dehydration_risk" for a in alerts))
+
     def test_dehydration_risk(self):
         alerts = check_energy_balance(CLIENT, 2600, 150, [6, 7, 6, 7])  # 4 loose > 3
         self.assertTrue(any(a.alert_type == "dehydration_risk" for a in alerts))
         # exactly 3 loose should NOT fire
         alerts3 = check_energy_balance(CLIENT, 2600, 150, [6, 7, 6])
         self.assertFalse(any(a.alert_type == "dehydration_risk" for a in alerts3))
+
+    def test_invalid_inputs_raise(self):
+        with self.assertRaises(ValueError):
+            check_energy_balance(CLIENT, day_calories=-1)
+        with self.assertRaises(ValueError):
+            check_energy_balance(CLIENT, day_protein_g=-1)
+        with self.assertRaises(ValueError):
+            check_energy_balance(CLIENT, bristol_events=[8])
 
     def test_boundary_at_minimum(self):
         # exactly the floor -> no deficit alert

@@ -1,0 +1,14 @@
+[
+  {"name": "havermout", "fodmap_group": "fructan", "fodmap_level": "medium", "calories_per_100g": 379, "protein_per_100g": 13.0, "carbs_per_100g": 67.0, "fat_per_100g": 7.0, "fiber_per_100g": 10.0, "prebiotic_score": 8, "safe_portion_g": 50},
+  {"name": "banaan", "fodmap_group": "fructose", "fodmap_level": "low", "calories_per_100g": 89, "protein_per_100g": 1.1, "carbs_per_100g": 23.0, "fat_per_100g": 0.3, "fiber_per_100g": 2.6, "prebiotic_score": 4, "safe_portion_g": 120},
+  {"name": "amandelen", "fodmap_group": "galactan", "fodmap_level": "medium", "calories_per_100g": 579, "protein_per_100g": 21.0, "carbs_per_100g": 22.0, "fat_per_100g": 50.0, "fiber_per_100g": 12.5, "prebiotic_score": 6, "safe_portion_g": 15},
+  {"name": "kipfilet", "fodmap_group": "low_fodmap", "fodmap_level": "very_low", "calories_per_100g": 165, "protein_per_100g": 31.0, "carbs_per_100g": 0.0, "fat_per_100g": 3.6, "fiber_per_100g": 0.0, "prebiotic_score": 0, "safe_portion_g": 150},
+  {"name": "rijst", "fodmap_group": "low_fodmap", "fodmap_level": "very_low", "calories_per_100g": 130, "protein_per_100g": 2.7, "carbs_per_100g": 28.0, "fat_per_100g": 0.3, "fiber_per_100g": 0.4, "prebiotic_score": 1, "safe_portion_g": 150},
+  {"name": "wortel", "fodmap_group": "low_fodmap", "fodmap_level": "very_low", "calories_per_100g": 41, "protein_per_100g": 0.9, "carbs_per_100g": 10.0, "fat_per_100g": 0.2, "fiber_per_100g": 2.8, "prebiotic_score": 3, "safe_portion_g": 150},
+  {"name": "courgette", "fodmap_group": "low_fodmap", "fodmap_level": "low", "calories_per_100g": 17, "protein_per_100g": 1.2, "carbs_per_100g": 3.1, "fat_per_100g": 0.3, "fiber_per_100g": 1.0, "prebiotic_score": 2, "safe_portion_g": 150},
+  {"name": "quinoa", "fodmap_group": "low_fodmap", "fodmap_level": "low", "calories_per_100g": 120, "protein_per_100g": 4.4, "carbs_per_100g": 21.0, "fat_per_100g": 1.9, "fiber_per_100g": 2.8, "prebiotic_score": 4, "safe_portion_g": 150},
+  {"name": "ui", "fodmap_group": "fructan", "fodmap_level": "high", "calories_per_100g": 40, "protein_per_100g": 1.1, "carbs_per_100g": 9.0, "fat_per_100g": 0.1, "fiber_per_100g": 1.7, "prebiotic_score": 9, "safe_portion_g": 12},
+  {"name": "knoflook", "fodmap_group": "fructan", "fodmap_level": "high", "calories_per_100g": 149, "protein_per_100g": 6.4, "carbs_per_100g": 33.0, "fat_per_100g": 0.5, "fiber_per_100g": 2.1, "prebiotic_score": 10, "safe_portion_g": 3},
+  {"name": "melk", "fodmap_group": "lactose", "fodmap_level": "high", "calories_per_100g": 64, "protein_per_100g": 3.4, "carbs_per_100g": 4.8, "fat_per_100g": 3.6, "fiber_per_100g": 0.0, "prebiotic_score": 0, "safe_portion_g": 50},
+  {"name": "appel", "fodmap_group": "polyol", "fodmap_level": "high", "calories_per_100g": 52, "protein_per_100g": 0.3, "carbs_per_100g": 14.0, "fat_per_100g": 0.2, "fiber_per_100g": 2.4, "prebiotic_score": 5, "safe_portion_g": 20}
+]

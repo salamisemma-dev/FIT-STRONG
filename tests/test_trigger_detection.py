@@ -20,16 +20,16 @@ class TestTriggerDetection(unittest.TestCase):
         self.assertEqual(result[0].occurrences, 1)
 
     def test_no_following_symptom_scores_nothing(self):
-        meals = [Meal(BASE, "breakfast", [FoodItem("rijst", 100)])]
+        meals = [Meal(BASE, "breakfast", [FoodItem("rijst", 100, "low_fodmap", "very_low")])]
         symptoms = [Symptom(BASE + timedelta(hours=8), abdominal_pain=9)]  # outside window
         self.assertEqual(detect_triggers(meals, symptoms), [])
 
     def test_ordering_and_top_n(self):
         meals = [
-            Meal(BASE, "breakfast", [FoodItem("ui", 10)]),
-            Meal(BASE + timedelta(hours=6), "lunch", [FoodItem("knoflook", 5)]),
-            Meal(BASE + timedelta(hours=12), "dinner", [FoodItem("appel", 100)]),
-            Meal(BASE + timedelta(hours=18), "snack", [FoodItem("melk", 200)]),
+            Meal(BASE, "breakfast", [FoodItem("ui", 10, "fructan", "high")]),
+            Meal(BASE + timedelta(hours=6), "lunch", [FoodItem("knoflook", 5, "fructan", "high")]),
+            Meal(BASE + timedelta(hours=12), "dinner", [FoodItem("appel", 100, "polyol", "high")]),
+            Meal(BASE + timedelta(hours=18), "snack", [FoodItem("melk", 200, "lactose", "high")]),
         ]
         symptoms = [
             Symptom(BASE + timedelta(hours=3), abdominal_pain=9),
@@ -41,22 +41,29 @@ class TestTriggerDetection(unittest.TestCase):
         self.assertEqual(len(result), 3)
         self.assertEqual([t.food_name for t in result], ["ui", "knoflook", "appel"])
 
-    def test_bloating_tiebreaker_when_pain_none(self):
-        meals = [Meal(BASE, "breakfast", [FoodItem("ui", 10)])]
+    def test_bloating_counts_when_pain_low(self):
+        meals = [Meal(BASE, "breakfast", [FoodItem("ui", 10, "fructan", "high")])]
+        symptoms = [Symptom(BASE + timedelta(hours=3), abdominal_pain=1, bloating=9)]
+        result = detect_triggers(meals, symptoms)
+        self.assertEqual(result[0].food_name, "ui")
+        self.assertEqual(result[0].score, 9.0)
+
+    def test_bloating_counts_when_pain_none(self):
+        meals = [Meal(BASE, "breakfast", [FoodItem("ui", 10, "fructan", "high")])]
         symptoms = [Symptom(BASE + timedelta(hours=3), bloating=6)]
         result = detect_triggers(meals, symptoms)
         self.assertEqual(result[0].food_name, "ui")
 
-    def test_high_fodmap_outranks_innocent_bystander(self):
-        # ui (high) + kipfilet (very_low) share one meal followed by pain.
+    def test_high_fodmap_suppresses_innocent_bystander(self):
+        # ui (high) + kipfilet (very_low) share one meal followed by pain. The engine
+        # is FODMAP-trigger detection, so very-low/low_fodmap staples are not surfaced.
         meals = [Meal(BASE, "lunch", [
             FoodItem("ui", 200, "fructan", "high"),
             FoodItem("kipfilet", 150, "low_fodmap", "very_low"),
         ])]
         symptoms = [Symptom(BASE + timedelta(hours=3), abdominal_pain=8)]
         result = detect_triggers(meals, symptoms)
-        self.assertEqual(result[0].food_name, "ui")
-        self.assertGreater(result[0].score, result[1].score)
+        self.assertEqual([r.food_name for r in result], ["ui"])
 
     def test_empty_inputs(self):
         self.assertEqual(detect_triggers([], []), [])

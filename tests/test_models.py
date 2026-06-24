@@ -51,6 +51,13 @@ class TestModels(unittest.TestCase):
             m.Workout(started_at=datetime(2026, 1, 1), duration_min=60, intensity=5,
                       perceived_exertion=5)
 
+    def test_food_ref_numeric_ranges(self):
+        m.FoodRef("ui", "fructan", "high", 40, 1.1, 9, 0.1, 1.7, 9, 12)
+        with self.assertRaises(ValueError):
+            m.FoodRef("bad", "fructan", "high", -1, 1, 1, 1, 1, 1)
+        with self.assertRaises(ValueError):
+            m.FoodRef("bad", "fructan", "high", 1, 1, 1, 1, 1, 1, -1)
+
     def test_alert_severity_and_dict(self):
         a = m.Alert("low_protein", "critical", "x")
         self.assertEqual(a.to_dict()["severity"], "critical")

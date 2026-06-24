@@ -20,8 +20,12 @@ gut health**.
 
 ## Quickstart
 ```bash
-# Run the engine on the sample diary
-PYTHONPATH=src python -m fit_strong.cli examples/sample_diary.json --food-db config/food_db.json
+# Install locally, then run the engine on the sample diary
+python -m pip install -e . --no-deps
+fit-strong examples/sample_diary.json --food-db config/food_db.json
+
+# From a source checkout without installing
+$env:PYTHONPATH="src"; python -m fit_strong.cli examples/sample_diary.json --food-db config/food_db.json
 
 # Tests (stdlib unittest, zero dependencies)
 python -m unittest discover -s tests
@@ -42,17 +46,21 @@ print(report.to_dict())
 ## Project layout (BOB / spec-driven)
 ```
 constitution.md          # supreme contract (tech standards, layering, evidence policy)
-specs/*.spec.md          # 7 executable specs — permanent system memory
+specs/*.spec.md          # 8 executable specs — permanent system memory
 src/fit_strong/          # models -> algorithms (pure) -> engine -> cli
-config/food_db.json      # reference food database (FODMAP + macros + prebiotic score)
-tests/                   # 33 unittest cases, one file per spec
-scripts/bob_validate.mjs # spec + spec→test traceability gate (CI)
+src/fit_strong/data/     # packaged food DB (install-safe copy of config/food_db.json)
+config/food_db.json      # editable source food DB (FODMAP + macros + prebiotic score)
+tests/                   # 44 unittest cases, one file per spec
+scripts/bob_validate.mjs # spec + food-DB drift gate (CI)
+scripts/bob_ready.mjs    # validate + tests in one gate (CI)
 skill/SKILL.md           # Claude coaching-skill wrapper
 docs/PVA.md              # plan van aanpak: pros, cons, and the fix for each con
+docs/EVIDENCE.md         # every threshold + source + confidence level (honest)
+docs/TRACEABILITY.md     # spec clause -> test method matrix
 examples/sample_diary.json
 ```
 
 ## Status
-Core engine complete & green (33 tests). Web frontend, Postgres persistence, auth and
+Core engine complete & green (43 tests). Web frontend, Postgres persistence, auth and
 ML are **roadmap** — see [docs/PVA.md](docs/PVA.md). The engine is deliberately free of
 those concerns so they layer on without a rewrite.

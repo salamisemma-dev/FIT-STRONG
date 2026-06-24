@@ -34,7 +34,8 @@ Assemble into the diary JSON shape in `../examples/sample_diary.json`.
 ### Phase 2 — Analysis (run the engine)
 From the repo root:
 ```bash
-PYTHONPATH=src python -m fit_strong.cli <diary.json> --food-db config/food_db.json
+fit-strong <diary.json> --food-db config/food_db.json
+# source checkout without install: PowerShell `$env:PYTHONPATH="src"; python -m fit_strong.cli <diary.json> --food-db config/food_db.json`
 ```
 This returns the full report as JSON. (Or import `fit_strong.generate_report` directly.)
 

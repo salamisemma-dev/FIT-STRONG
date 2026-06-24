@@ -134,7 +134,14 @@ class FoodRef:
     def __post_init__(self) -> None:
         self.fodmap_group = FodmapGroup.coerce(self.fodmap_group)
         self.fodmap_level = FodmapLevel.coerce(self.fodmap_level)
+        for name in (
+            "calories_per_100g", "protein_per_100g", "carbs_per_100g",
+            "fat_per_100g", "fiber_per_100g",
+        ):
+            _require(getattr(self, name) >= 0, f"{name} must be >= 0, got {getattr(self, name)}")
         _in_range(self.prebiotic_score, 0, 10, "prebiotic_score")
+        if self.safe_portion_g is not None:
+            _require(self.safe_portion_g >= 0, f"safe_portion_g must be >= 0, got {self.safe_portion_g}")
 
 
 @dataclass

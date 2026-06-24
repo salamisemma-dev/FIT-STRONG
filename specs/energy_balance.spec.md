@@ -1,7 +1,7 @@
 ---
 id: spec-energy-balance
 type: validation
-version: 1.0
+version: 1.0.0
 status: approved
 owner: fit-strong-core
 depends_on: [spec-models, spec-macro-targets]
@@ -14,7 +14,7 @@ day's intake against weight-scaled minimums and stool frequency. Produces `Alert
 report surfaces.
 
 ## Contract
-`check_energy_balance(client, day_calories, day_protein_g, bristol_events) ->
+`check_energy_balance(client, day_calories=None, day_protein_g=None, bristol_events=None) ->
 list[Alert]` in `src/fit_strong/algorithms/energy_balance.py`. Pure.
 
 - `min_calories = weight_kg * 30`; if `day_calories < min_calories` →
@@ -23,12 +23,13 @@ list[Alert]` in `src/fit_strong/algorithms/energy_balance.py`. Pure.
   `Alert('low_protein','critical', ...)`.
 - `bristol_events`: list of bristol_stool ints for the day. If count of values in
   {6,7} `> 3` → `Alert('dehydration_risk','warning', ...)` (fluid/potassium loss).
-- No problems → `[]`.
+- No supplied problems → `[]`. Missing values skip only their own check; partial input remains valid.
 
 ## Business rules
 - Uses the same 30 kcal/kg and 1.6 g/kg floors as `spec-macro-targets` (single source).
 - Protein deficit is `critical` (muscle catabolism); calorie deficit is `warning`.
 - Severity strings restricted to the model's allowed set.
+- Negative calorie/protein inputs and Bristol values outside 1–7 raise `ValueError`.
 
 ## Evidence
 - Energy availability < 30 kcal/kg/day risks muscle breakdown / low energy availability.
@@ -41,4 +42,4 @@ alter alert frequency.
 
 ## Verification
 `tests/test_energy_balance.py` — low-calorie, low-protein, dehydration each fire with
-correct type/severity; an adequate day yields `[]`; boundary at exactly the minimum.
+correct type/severity; an adequate day yields `[]`; partial protein and Bristol-only inputs still alert; invalid inputs raise; boundary at exactly the minimum.

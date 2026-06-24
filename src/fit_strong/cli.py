@@ -38,8 +38,16 @@ def run(diary_path: str, food_db_path: str | None = None) -> dict:
     data = load_diary(diary_path)
     client = Client(**data["client"])
     meals = [_build_meal(m) for m in data.get("meals", [])]
-    symptoms = [Symptom(recorded_at=_dt(s.pop("recorded_at")), **s) for s in data.get("symptoms", [])]
-    workouts = [Workout(started_at=_dt(w.pop("started_at")), **w) for w in data.get("workouts", [])]
+    symptoms = [
+        Symptom(recorded_at=_dt(s["recorded_at"]),
+                **{k: v for k, v in s.items() if k != "recorded_at"})
+        for s in data.get("symptoms", [])
+    ]
+    workouts = [
+        Workout(started_at=_dt(w["started_at"]),
+                **{k: v for k, v in w.items() if k != "started_at"})
+        for w in data.get("workouts", [])
+    ]
 
     food_db = {}
     try:

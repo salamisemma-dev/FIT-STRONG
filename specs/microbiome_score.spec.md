@@ -1,7 +1,7 @@
 ---
 id: spec-microbiome-score
 type: transformation
-version: 1.0
+version: 1.0.0
 status: approved
 owner: fit-strong-core
 depends_on: [spec-models]

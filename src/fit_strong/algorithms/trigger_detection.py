@@ -5,7 +5,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import timedelta
 
-from ..models import FodmapLevel, Meal, Symptom
+from ..models import FodmapGroup, FodmapLevel, Meal, Symptom
 
 # Per-food suspicion weight: a low-FODMAP food sharing a meal with the real culprit
 # must not rank equally. Mirrors the evidence that high-FODMAP foods are likely triggers.
@@ -26,6 +26,17 @@ class TriggerScore:
 
     def to_dict(self) -> dict:
         return self.__dict__.copy()
+
+
+def _symptom_intensity(symptom: Symptom) -> float:
+    return max(
+        symptom.abdominal_pain if symptom.abdominal_pain is not None else 0,
+        symptom.bloating if symptom.bloating is not None else 0,
+    )
+
+
+def _is_fodmap_suspect(item) -> bool:
+    return item.fodmap_level != FodmapLevel.VERY_LOW and item.fodmap_group != FodmapGroup.LOW_FODMAP
 
 
 def detect_triggers(
@@ -51,19 +62,13 @@ def detect_triggers(
         lo = meal.recorded_at + start
         hi = meal.recorded_at + end
         window = [s for s in symptoms if lo <= s.recorded_at <= hi]
-        # A symptom counts when pain >= threshold (bloating tie-breaker if pain None).
-        counting = [
-            s for s in window
-            if (s.abdominal_pain is not None and s.abdominal_pain >= pain_threshold)
-            or (s.abdominal_pain is None and s.bloating is not None and s.bloating >= pain_threshold)
-        ]
+        counting = [s for s in window if _symptom_intensity(s) >= pain_threshold]
         if not counting:
             continue
-        pain_value = max(
-            (s.abdominal_pain if s.abdominal_pain is not None else s.bloating) or 0
-            for s in counting
-        )
+        pain_value = max(_symptom_intensity(s) for s in counting)
         for item in meal.items:
+            if not _is_fodmap_suspect(item):
+                continue
             key = item.name.strip().lower()
             suspicion = pain_value * _SUSPICION[item.fodmap_level]
             score[key] = score.get(key, 0.0) + suspicion

@@ -14,7 +14,7 @@ from .algorithms.fodmap_load import fodmap_load, meal_exceeds_threshold
 from .algorithms.macro_targets import MacroTargets, compute_macro_targets
 from .algorithms.microbiome_score import MicrobiomeScore, microbiome_score
 from .algorithms.trigger_detection import TriggerScore, detect_triggers
-from .models import Alert, Client, FoodRef, Meal, Severity, Symptom, Workout
+from .models import Alert, Client, FoodItem, FoodRef, Meal, Severity, Symptom, Workout
 
 DISCLAIMER = (
     "Dit advies is indicatief en geen medisch advies. Bij aanhoudende klachten of "
@@ -48,6 +48,37 @@ class Report:
         }
 
 
+def _food_db_by_name(food_db: Mapping[str, FoodRef]) -> dict[str, FoodRef]:
+    return {key.strip().lower(): value for key, value in food_db.items()}
+
+
+def _resolve_meals(meals: list[Meal], food_db: Mapping[str, FoodRef]) -> list[Meal]:
+    by_name = _food_db_by_name(food_db)
+    if not by_name:
+        return meals
+
+    resolved: list[Meal] = []
+    for meal in meals:
+        items: list[FoodItem] = []
+        for item in meal.items:
+            ref = by_name.get(item.name.strip().lower())
+            if ref is None:
+                items.append(item)
+                continue
+            items.append(FoodItem(item.name, item.amount_g, ref.fodmap_group, ref.fodmap_level))
+        resolved.append(Meal(meal.recorded_at, meal.meal_type, items, meal.notes))
+    return resolved
+
+
+def _meal_exceeds_safe_portion(meal: Meal, food_db: Mapping[str, FoodRef]) -> bool:
+    by_name = _food_db_by_name(food_db)
+    for item in meal.items:
+        ref = by_name.get(item.name.strip().lower())
+        if ref and ref.safe_portion_g is not None and item.amount_g > ref.safe_portion_g:
+            return True
+    return False
+
+
 def generate_report(
     client: Client,
     meals: list[Meal],
@@ -62,26 +93,27 @@ def generate_report(
 ) -> Report:
     food_db = food_db or {}
     workouts = workouts or []
+    resolved_meals = _resolve_meals(meals, food_db)
 
     macro_targets = compute_macro_targets(client)
-    triggers = detect_triggers(meals, symptoms)
+    triggers = detect_triggers(resolved_meals, symptoms)
 
     alerts: list[Alert] = []
-    # One high_fodmap alert per meal over threshold.
-    for meal in meals:
-        if meal_exceeds_threshold(meal.items):
+    # One high_fodmap alert per meal over threshold or configured safe portion.
+    for meal in resolved_meals:
+        if meal_exceeds_threshold(meal.items) or _meal_exceeds_safe_portion(meal, food_db):
             alerts.append(Alert(
                 "high_fodmap", Severity.WARNING,
                 f"Hoge FODMAP-belasting bij {meal.meal_type.value} "
                 f"({meal.recorded_at:%Y-%m-%d %H:%M}): load {fodmap_load(meal.items)}.",
             ))
-    # Energy-balance only when intake numbers are supplied (no fabricated data).
-    if day_calories is not None and day_protein_g is not None:
+    # Energy-balance is partial-input safe: no fabricated numbers, no dropped Bristol alert.
+    if day_calories is not None or day_protein_g is not None or bristol_events is not None:
         alerts.extend(check_energy_balance(client, day_calories, day_protein_g, bristol_events))
 
     micro: Optional[MicrobiomeScore] = None
     if food_db:
-        all_items = [item for meal in meals for item in meal.items]
+        all_items = [item for meal in resolved_meals for item in meal.items]
         micro = microbiome_score(all_items, food_db)
 
     referral = REFERRAL_ADVICE if no_improvement_weeks >= 4 else None
