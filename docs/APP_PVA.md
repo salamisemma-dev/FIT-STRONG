@@ -83,6 +83,8 @@ De app exporteert hetzelfde shape als de CLI nu leest:
 | N14 | **Toegankelijkheid** (motion, contrast, gezondheidscontext). | WCAG-AA contrast, `prefers-reduced-motion`, toetsenbord/focus, schaalbare tekst, geen kleur-alleen-betekenis (FODMAP-tags ook tekst). |
 | N15 | **Schema-drift app↔engine.** App-JSON moet exact matchen met wat de CLI leest; nu geen gate. | Publiceer een JSON Schema voor de diary, voeg `fit-strong --validate-diary <file>` toe en een CI-check; de app valideert vóór export. |
 | N16 | **3D-tilt/parallax kan op touch niet werken of misselijk maken.** Hover-tilt bestaat niet op mobiel; parallax kan vestibulaire klachten geven. | Tilt alleen op pointer/hover-capable devices (`@media (hover:hover)`); op touch een subtiele press-scale. Parallax beperkt + uit bij reduced-motion. |
+| N17 | **"Data uit Samsung Notes/Keep of iPhone Notities droppen" kan niet rechtstreeks.** Een webapp heeft geen API om andermans notitie-apps te lezen — de belofte zou vals zijn. | Realistische mechanismen: (a) **plakken** (kopieer notitie → plak → parse regels, in prototype), (b) **.txt slepen** (desktop, in prototype), (c) **Web Share Target** (Android-PWA: deel-knop vanuit Notes → app) = roadmap, (d) iOS: Share Sheet/Shortcuts = beperkt, roadmap. Geen valse auto-sync-belofte. |
+| N18 | **Light theme kan contrast/leesbaarheid breken** t.o.v. dark-getunede accenten. | Aparte light-tokens (donkerder primair/cyaan/groen voor AA-contrast op licht), thema persist in localStorage, volgt `prefers-color-scheme` als geen keuze. |
 
 ## 9. Visuele richting — hyperflow & 3D motion
 
@@ -102,6 +104,14 @@ Geïnspireerd op de SALAMIS- en saldiapp brand-designs. **Concreet prototype:** 
 - Gradient-glow accenten; alles **GPU-goedkoop** en **uit bij `prefers-reduced-motion`**.
 
 **Niet-onderhandelbaar:** motion mag de leek-snelheid nooit schaden. De data-laag (invoer→export→engine) werkt identiek met motion volledig uit.
+
+**Themes:** licht én donker, beide met de tokens hierboven (light = donkerder primair/cyaan/groen voor AA-contrast). Keuze persist; volgt anders systeemvoorkeur.
+
+**Profiel & cyclus:** segmented `Man | Vrouw` in de nav. Bij `Vrouw` verschijnt een opt-in **Cyclus**-kaart (fase + cyclusdag + fase-tip), gekoppeld aan de bestaande `spec-cycle-hormone` engine-logica. Cyclus is nooit afgeleid uit geslacht-alleen en nooit verplicht (N4/N10).
+
+**Notities & import:** vrije notitie-veld (snelle log) + een **"Importeer uit Notities"**-blok (plak tekst of sleep `.txt`; regel-parser herkent tijd + product). Zie N17 voor de eerlijke grens t.o.v. Samsung/iPhone-notitie-apps.
+
+Alle vier (themes, profiel/cyclus, notities, import) staan werkend in de prototype [`app/prototype/index.html`](../app/prototype/index.html).
 
 ## 6. Technische aanpak
 
