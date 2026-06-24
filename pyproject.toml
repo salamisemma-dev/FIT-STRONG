@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "fit-strong"
+version = "1.0.0"
+description = "Evidence-based nutrition & training coaching engine (gut-muscle axis, SCFA, FODMAP, training load)."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+dependencies = []   # stdlib-only by constitution §2
+
+[project.scripts]
+fit-strong = "fit_strong.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+fit_strong = []

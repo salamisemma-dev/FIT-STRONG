@@ -1,0 +1,40 @@
+{
+  "client": {
+    "name": "Demo",
+    "weight_kg": 80,
+    "height_cm": 180,
+    "sex": "male",
+    "training_goal": "muscle_gain",
+    "weekly_sport_hours": 8
+  },
+  "day_calories": 2000,
+  "day_protein_g": 110,
+  "bristol_events": [6, 7, 6, 7],
+  "no_improvement_weeks": 5,
+  "meals": [
+    {
+      "recorded_at": "2026-01-01T08:00:00",
+      "meal_type": "breakfast",
+      "items": [
+        {"name": "havermout", "amount_g": 80, "fodmap_group": "fructan", "fodmap_level": "medium"},
+        {"name": "banaan", "amount_g": 120, "fodmap_group": "fructose", "fodmap_level": "low"},
+        {"name": "amandelen", "amount_g": 15, "fodmap_group": "galactan", "fodmap_level": "medium"}
+      ]
+    },
+    {
+      "recorded_at": "2026-01-01T13:00:00",
+      "meal_type": "lunch",
+      "items": [
+        {"name": "ui", "amount_g": 200, "fodmap_group": "fructan", "fodmap_level": "high"},
+        {"name": "kipfilet", "amount_g": 150, "fodmap_group": "low_fodmap", "fodmap_level": "very_low"},
+        {"name": "rijst", "amount_g": 150, "fodmap_group": "low_fodmap", "fodmap_level": "very_low"}
+      ]
+    }
+  ],
+  "symptoms": [
+    {"recorded_at": "2026-01-01T16:00:00", "abdominal_pain": 8, "bloating": 7, "energy_level": 4, "bristol_stool": 6}
+  ],
+  "workouts": [
+    {"started_at": "2026-01-01T18:00:00", "duration_min": 60, "intensity": 7, "workout_type": "strength", "perceived_exertion": 15}
+  ]
+}
