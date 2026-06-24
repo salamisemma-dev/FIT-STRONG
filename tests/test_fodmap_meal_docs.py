@@ -40,6 +40,15 @@ class TestFodmapMealDocs(unittest.TestCase):
             self.assertIn(expected, combined)
 
 
+    def test_meal_score_chart_uses_fixed_spacing_image(self):
+        from PIL import Image
+        import io
+        path = ROOT / "docs" / "fitstrong_combinaties_vrouw_tabellen_grafieken.docx"
+        with ZipFile(path) as zf:
+            image = Image.open(io.BytesIO(zf.read("word/media/image2.png")))
+        self.assertEqual((1500, 780), image.size)
+
+
 if __name__ == "__main__":
     unittest.main()
 
