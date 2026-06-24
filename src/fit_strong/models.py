@@ -9,7 +9,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from datetime import date, datetime
 from enum import Enum
-from typing import Optional
+from typing import Optional, Any
 
 
 # --------------------------------------------------------------------------- enums
@@ -48,6 +48,12 @@ class FodmapGroup(_StrEnum):
     POLYOL = "polyol"
     LOW_FODMAP = "low_fodmap"
     UNKNOWN = "unknown"
+
+    @classmethod
+    def coerce(cls, value: "str | FodmapGroup") -> "FodmapGroup":
+        if value == "mannitol":
+            value = "polyol"
+        return super().coerce(value)
 
 
 class FodmapLevel(_StrEnum):
@@ -130,6 +136,12 @@ class FoodRef:
     fiber_per_100g: float
     prebiotic_score: int
     safe_portion_g: Optional[float] = None
+    id: Optional[str] = None
+    category: Optional[str] = None
+    omega3_g_per_100g: float = 0.0
+    timing_advice: Optional[str] = None
+    source: Optional[str] = None
+    extra: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         self.fodmap_group = FodmapGroup.coerce(self.fodmap_group)
@@ -142,6 +154,7 @@ class FoodRef:
         _in_range(self.prebiotic_score, 0, 10, "prebiotic_score")
         if self.safe_portion_g is not None:
             _require(self.safe_portion_g >= 0, f"safe_portion_g must be >= 0, got {self.safe_portion_g}")
+        _require(self.omega3_g_per_100g >= 0, f"omega3_g_per_100g must be >= 0, got {self.omega3_g_per_100g}")
 
 
 @dataclass

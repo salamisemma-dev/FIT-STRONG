@@ -1,0 +1,16 @@
+{
+  "supplements": [
+    {
+      "id": "creatine_monohydrate",
+      "dose_g": 5
+    },
+    {
+      "id": "electrolytes_no_sorbitol",
+      "dose": "volgens product"
+    }
+  ],
+  "avoid_by_default": [
+    "caffeine_anhydrous"
+  ],
+  "notes": "Indicatief; check labels, medicatie en persoonlijke tolerantie."
+}

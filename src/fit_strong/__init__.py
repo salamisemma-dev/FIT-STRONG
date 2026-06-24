@@ -14,6 +14,14 @@ from .algorithms.microbiome_score import MicrobiomeScore, microbiome_score
 from .algorithms.trigger_detection import TriggerScore, detect_triggers
 from .engine import DISCLAIMER, Report, generate_report
 from .food_db import load_food_db
+from .combinations import (
+    CombinationRecommendation,
+    CombinationRule,
+    SupplementRef,
+    load_combination_rules,
+    load_supplement_db,
+    recommend_combination,
+)
 from .models import (
     Alert,
     Client,
@@ -42,5 +50,7 @@ __all__ = [
     "microbiome_score", "MicrobiomeScore",
     "generate_report", "Report", "DISCLAIMER",
     "load_food_db",
+    "SupplementRef", "CombinationRule", "CombinationRecommendation",
+    "load_supplement_db", "load_combination_rules", "recommend_combination",
     "__version__",
 ]

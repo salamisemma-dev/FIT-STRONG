@@ -1,0 +1,113 @@
+{
+  "version": "1.0",
+  "rules": [
+    {
+      "id": "post_workout_protein_carbs",
+      "type": "good_combo",
+      "description": "Eiwit + koolhydraten na training",
+      "ingredients": [
+        "whey_isolate_lactose_free",
+        "rice_white",
+        "rijst",
+        "sweet_potato",
+        "banana_unripe",
+        "quinoa"
+      ],
+      "condition": {
+        "meal_timing": "post_workout"
+      },
+      "reason": "ondersteunt glycogeenaanvulling en spierherstel"
+    },
+    {
+      "id": "creatine_with_carbs",
+      "type": "good_combo",
+      "description": "Creatine met koolhydraten",
+      "ingredients": [
+        "creatine_monohydrate",
+        "rice_white",
+        "rijst",
+        "banana_unripe",
+        "sweet_potato",
+        "quinoa"
+      ],
+      "condition": {
+        "any_carb_present": true
+      },
+      "reason": "praktisch goed te combineren met herstelmaaltijd"
+    },
+    {
+      "id": "omega3_with_fat",
+      "type": "good_combo",
+      "description": "Omega-3 bij vetbevattende maaltijd",
+      "ingredients": [
+        "omega3_fish_oil",
+        "olive_oil",
+        "salmon_wild",
+        "mackerel",
+        "walnuts",
+        "flaxseed_ground"
+      ],
+      "condition": {
+        "contains_fat": true
+      },
+      "reason": "vet verhoogt opname van vetoplosbare componenten"
+    },
+    {
+      "id": "probiotic_with_prebiotic_foods",
+      "type": "good_combo",
+      "description": "Probiotica met vezelrijke voeding",
+      "ingredients": [
+        "probiotic_bifido",
+        "psyllium",
+        "flaxseed_ground",
+        "lentils_canned_rinsed",
+        "chickpeas_canned_rinsed"
+      ],
+      "condition": {
+        "fiber_present": true
+      },
+      "reason": "vezels voeden darmbacterien, rustig opbouwen"
+    },
+    {
+      "id": "avoid_caffeine_with_sensitive_gut",
+      "type": "warning",
+      "description": "Cafeine kan darmprikkeling geven",
+      "ingredients": [
+        "caffeine_anhydrous"
+      ],
+      "condition": {
+        "fodmap_sensitive": true
+      },
+      "reason": "kan peristaltiek/maagzuur verhogen"
+    },
+    {
+      "id": "avoid_high_fat_pre_workout",
+      "type": "bad_combo",
+      "description": "Vette maaltijd vlak voor training",
+      "ingredients": [
+        "salmon_wild",
+        "mackerel",
+        "walnuts",
+        "olive_oil"
+      ],
+      "condition": {
+        "meal_timing": "pre_workout",
+        "meal_near_h_lt": 2
+      },
+      "reason": "vet vertraagt maaglediging"
+    },
+    {
+      "id": "electrolytes_with_sweating",
+      "type": "good_combo",
+      "description": "Elektrolyten bij intensief zweten",
+      "ingredients": [
+        "electrolytes_no_sorbitol"
+      ],
+      "condition": {
+        "workout_intensity_gt": 7,
+        "sweat_loss_high": true
+      },
+      "reason": "ondersteunt vocht- en elektrolytenbalans"
+    }
+  ]
+}

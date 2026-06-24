@@ -1,14 +1,823 @@
-[
-  {"name": "havermout", "fodmap_group": "fructan", "fodmap_level": "medium", "calories_per_100g": 379, "protein_per_100g": 13.0, "carbs_per_100g": 67.0, "fat_per_100g": 7.0, "fiber_per_100g": 10.0, "prebiotic_score": 8, "safe_portion_g": 50},
-  {"name": "banaan", "fodmap_group": "fructose", "fodmap_level": "low", "calories_per_100g": 89, "protein_per_100g": 1.1, "carbs_per_100g": 23.0, "fat_per_100g": 0.3, "fiber_per_100g": 2.6, "prebiotic_score": 4, "safe_portion_g": 120},
-  {"name": "amandelen", "fodmap_group": "galactan", "fodmap_level": "medium", "calories_per_100g": 579, "protein_per_100g": 21.0, "carbs_per_100g": 22.0, "fat_per_100g": 50.0, "fiber_per_100g": 12.5, "prebiotic_score": 6, "safe_portion_g": 15},
-  {"name": "kipfilet", "fodmap_group": "low_fodmap", "fodmap_level": "very_low", "calories_per_100g": 165, "protein_per_100g": 31.0, "carbs_per_100g": 0.0, "fat_per_100g": 3.6, "fiber_per_100g": 0.0, "prebiotic_score": 0, "safe_portion_g": 150},
-  {"name": "rijst", "fodmap_group": "low_fodmap", "fodmap_level": "very_low", "calories_per_100g": 130, "protein_per_100g": 2.7, "carbs_per_100g": 28.0, "fat_per_100g": 0.3, "fiber_per_100g": 0.4, "prebiotic_score": 1, "safe_portion_g": 150},
-  {"name": "wortel", "fodmap_group": "low_fodmap", "fodmap_level": "very_low", "calories_per_100g": 41, "protein_per_100g": 0.9, "carbs_per_100g": 10.0, "fat_per_100g": 0.2, "fiber_per_100g": 2.8, "prebiotic_score": 3, "safe_portion_g": 150},
-  {"name": "courgette", "fodmap_group": "low_fodmap", "fodmap_level": "low", "calories_per_100g": 17, "protein_per_100g": 1.2, "carbs_per_100g": 3.1, "fat_per_100g": 0.3, "fiber_per_100g": 1.0, "prebiotic_score": 2, "safe_portion_g": 150},
-  {"name": "quinoa", "fodmap_group": "low_fodmap", "fodmap_level": "low", "calories_per_100g": 120, "protein_per_100g": 4.4, "carbs_per_100g": 21.0, "fat_per_100g": 1.9, "fiber_per_100g": 2.8, "prebiotic_score": 4, "safe_portion_g": 150},
-  {"name": "ui", "fodmap_group": "fructan", "fodmap_level": "high", "calories_per_100g": 40, "protein_per_100g": 1.1, "carbs_per_100g": 9.0, "fat_per_100g": 0.1, "fiber_per_100g": 1.7, "prebiotic_score": 9, "safe_portion_g": 12},
-  {"name": "knoflook", "fodmap_group": "fructan", "fodmap_level": "high", "calories_per_100g": 149, "protein_per_100g": 6.4, "carbs_per_100g": 33.0, "fat_per_100g": 0.5, "fiber_per_100g": 2.1, "prebiotic_score": 10, "safe_portion_g": 3},
-  {"name": "melk", "fodmap_group": "lactose", "fodmap_level": "high", "calories_per_100g": 64, "protein_per_100g": 3.4, "carbs_per_100g": 4.8, "fat_per_100g": 3.6, "fiber_per_100g": 0.0, "prebiotic_score": 0, "safe_portion_g": 50},
-  {"name": "appel", "fodmap_group": "polyol", "fodmap_level": "high", "calories_per_100g": 52, "protein_per_100g": 0.3, "carbs_per_100g": 14.0, "fat_per_100g": 0.2, "fiber_per_100g": 2.4, "prebiotic_score": 5, "safe_portion_g": 20}
-]
+{
+  "version": "2.0",
+  "last_updated": "2026-06-24",
+  "foods": [
+    {
+      "id": "havermout",
+      "name": "havermout",
+      "category": "granen",
+      "fodmap_group": "fructan",
+      "fodmap_level": "medium",
+      "safe_portion_g": 50,
+      "macros_per_100g": {
+        "calories": 379,
+        "protein_g": 13.0,
+        "carbs_g": 67.0,
+        "fat_g": 7.0,
+        "fiber_g": 10.0
+      },
+      "omega3_g_per_100g": 0.1,
+      "prebiotic_score": 8,
+      "timing_advice": "ontbijt of rustige pre-workout brandstof",
+      "source": "NEVO/Monash heuristic"
+    },
+    {
+      "id": "kipfilet",
+      "name": "kipfilet",
+      "category": "vlees",
+      "fodmap_group": "low_fodmap",
+      "fodmap_level": "very_low",
+      "safe_portion_g": 200,
+      "macros_per_100g": {
+        "calories": 165,
+        "protein_g": 31.0,
+        "carbs_g": 0.0,
+        "fat_g": 3.6,
+        "fiber_g": 0.0
+      },
+      "omega3_g_per_100g": 0.02,
+      "prebiotic_score": 0,
+      "timing_advice": "ideaal post-workout",
+      "source": "NEVO"
+    },
+    {
+      "id": "rijst",
+      "name": "rijst",
+      "category": "granen",
+      "fodmap_group": "low_fodmap",
+      "fodmap_level": "very_low",
+      "safe_portion_g": 200,
+      "macros_per_100g": {
+        "calories": 130,
+        "protein_g": 2.7,
+        "carbs_g": 28.0,
+        "fat_g": 0.3,
+        "fiber_g": 0.4
+      },
+      "omega3_g_per_100g": 0,
+      "prebiotic_score": 1,
+      "timing_advice": "pre- en post-workout",
+      "source": "NEVO/Monash"
+    },
+    {
+      "id": "ui",
+      "name": "ui",
+      "category": "groenten",
+      "fodmap_group": "fructan",
+      "fodmap_level": "high",
+      "safe_portion_g": 12,
+      "macros_per_100g": {
+        "calories": 40,
+        "protein_g": 1.1,
+        "carbs_g": 9.0,
+        "fat_g": 0.1,
+        "fiber_g": 1.7
+      },
+      "omega3_g_per_100g": 0,
+      "prebiotic_score": 9,
+      "timing_advice": "alleen test-porties bij herintroductie",
+      "source": "Monash heuristic"
+    },
+    {
+      "id": "knoflook",
+      "name": "knoflook",
+      "category": "groenten",
+      "fodmap_group": "fructan",
+      "fodmap_level": "high",
+      "safe_portion_g": 3,
+      "macros_per_100g": {
+        "calories": 149,
+        "protein_g": 6.4,
+        "carbs_g": 33.0,
+        "fat_g": 0.5,
+        "fiber_g": 2.1
+      },
+      "omega3_g_per_100g": 0,
+      "prebiotic_score": 10,
+      "timing_advice": "vermijd in eliminatiefase",
+      "source": "Monash heuristic"
+    },
+    {
+      "id": "amandelen",
+      "name": "amandelen",
+      "category": "noten",
+      "fodmap_group": "galactan",
+      "fodmap_level": "medium",
+      "safe_portion_g": 15,
+      "macros_per_100g": {
+        "calories": 579,
+        "protein_g": 21.0,
+        "carbs_g": 22.0,
+        "fat_g": 50.0,
+        "fiber_g": 12.5
+      },
+      "omega3_g_per_100g": 0.0,
+      "prebiotic_score": 6,
+      "timing_advice": "kleine portie; beperk bij gevoelige darm",
+      "source": "NEVO/Monash heuristic"
+    },
+    {
+      "id": "melk",
+      "name": "melk",
+      "category": "zuivel",
+      "fodmap_group": "lactose",
+      "fodmap_level": "high",
+      "safe_portion_g": 50,
+      "macros_per_100g": {
+        "calories": 64,
+        "protein_g": 3.4,
+        "carbs_g": 4.8,
+        "fat_g": 3.6,
+        "fiber_g": 0.0
+      },
+      "omega3_g_per_100g": 0,
+      "prebiotic_score": 0,
+      "timing_advice": "gebruik lactosevrij alternatief bij gevoeligheid",
+      "source": "NEVO/Monash"
+    },
+    {
+      "id": "appel",
+      "name": "appel",
+      "category": "fruit",
+      "fodmap_group": "polyol",
+      "fodmap_level": "high",
+      "safe_portion_g": 20,
+      "macros_per_100g": {
+        "calories": 52,
+        "protein_g": 0.3,
+        "carbs_g": 14.0,
+        "fat_g": 0.2,
+        "fiber_g": 2.4
+      },
+      "omega3_g_per_100g": 0,
+      "prebiotic_score": 5,
+      "timing_advice": "alleen test-porties bij herintroductie",
+      "source": "Monash heuristic"
+    },
+    {
+      "id": "chicken_breast",
+      "name": "Kipfilet (zonder vel)",
+      "category": "vlees",
+      "fodmap_group": "low_fodmap",
+      "fodmap_level": "very_low",
+      "safe_portion_g": 200,
+      "macros_per_100g": {
+        "calories": 165,
+        "protein_g": 31,
+        "carbs_g": 0,
+        "fat_g": 3.6,
+        "fiber_g": 0
+      },
+      "omega3_g_per_100g": 0.02,
+      "prebiotic_score": 0,
+      "timing_advice": "ideaal post-workout",
+      "source": "NEVO"
+    },
+    {
+      "id": "turkey_breast",
+      "name": "Kalkoenfilet",
+      "category": "vlees",
+      "fodmap_group": "low_fodmap",
+      "fodmap_level": "very_low",
+      "safe_portion_g": 200,
+      "macros_per_100g": {
+        "calories": 135,
+        "protein_g": 30,
+        "carbs_g": 0,
+        "fat_g": 1.5,
+        "fiber_g": 0
+      },
+      "omega3_g_per_100g": 0.01,
+      "prebiotic_score": 0,
+      "timing_advice": "post-workout of basismaaltijd",
+      "source": "NEVO"
+    },
+    {
+      "id": "beef_lean",
+      "name": "Rundvlees (mager, biefstuk)",
+      "category": "vlees",
+      "fodmap_group": "low_fodmap",
+      "fodmap_level": "very_low",
+      "safe_portion_g": 150,
+      "macros_per_100g": {
+        "calories": 205,
+        "protein_g": 26,
+        "carbs_g": 0,
+        "fat_g": 10,
+        "fiber_g": 0
+      },
+      "omega3_g_per_100g": 0.04,
+      "prebiotic_score": 0,
+      "timing_advice": "herstelmaaltijd, niet vlak voor training",
+      "source": "NEVO"
+    },
+    {
+      "id": "pork_tenderloin",
+      "name": "Varkenshaas",
+      "category": "vlees",
+      "fodmap_group": "low_fodmap",
+      "fodmap_level": "very_low",
+      "safe_portion_g": 150,
+      "macros_per_100g": {
+        "calories": 143,
+        "protein_g": 26,
+        "carbs_g": 0,
+        "fat_g": 4,
+        "fiber_g": 0
+      },
+      "omega3_g_per_100g": 0.02,
+      "prebiotic_score": 0,
+      "timing_advice": "post-workout of avondmaaltijd",
+      "source": "NEVO"
+    },
+    {
+      "id": "lamb_leg",
+      "name": "Lamsbout (mager)",
+      "category": "vlees",
+      "fodmap_group": "low_fodmap",
+      "fodmap_level": "very_low",
+      "safe_portion_g": 150,
+      "macros_per_100g": {
+        "calories": 194,
+        "protein_g": 25,
+        "carbs_g": 0,
+        "fat_g": 10,
+        "fiber_g": 0
+      },
+      "omega3_g_per_100g": 0.05,
+      "prebiotic_score": 0,
+      "timing_advice": "beperk bij vetgevoelige darm",
+      "source": "NEVO"
+    },
+    {
+      "id": "egg_whole",
+      "name": "Ei (heel)",
+      "category": "eieren",
+      "fodmap_group": "low_fodmap",
+      "fodmap_level": "very_low",
+      "safe_portion_g": 100,
+      "macros_per_100g": {
+        "calories": 155,
+        "protein_g": 13,
+        "carbs_g": 1.1,
+        "fat_g": 11,
+        "fiber_g": 0
+      },
+      "omega3_g_per_100g": 0.1,
+      "prebiotic_score": 0,
+      "timing_advice": "ontbijt of herstelmaaltijd",
+      "source": "NEVO"
+    },
+    {
+      "id": "egg_white",
+      "name": "Eiwit (alleen wit)",
+      "category": "eieren",
+      "fodmap_group": "low_fodmap",
+      "fodmap_level": "very_low",
+      "safe_portion_g": 150,
+      "macros_per_100g": {
+        "calories": 52,
+        "protein_g": 11,
+        "carbs_g": 0.7,
+        "fat_g": 0.2,
+        "fiber_g": 0
+      },
+      "omega3_g_per_100g": 0,
+      "prebiotic_score": 0,
+      "timing_advice": "post-workout, vetarm",
+      "source": "NEVO"
+    },
+    {
+      "id": "salmon_wild",
+      "name": "Zalm (wild, gekookt)",
+      "category": "vis",
+      "fodmap_group": "low_fodmap",
+      "fodmap_level": "very_low",
+      "safe_portion_g": 150,
+      "macros_per_100g": {
+        "calories": 182,
+        "protein_g": 25,
+        "carbs_g": 0,
+        "fat_g": 8,
+        "fiber_g": 0
+      },
+      "omega3_g_per_100g": 1.8,
+      "prebiotic_score": 0,
+      "timing_advice": "herstelmaaltijd, rijke omega-3 bron",
+      "source": "NEVO/Wageningen"
+    },
+    {
+      "id": "mackerel",
+      "name": "Makreel (gerookt/gekookt)",
+      "category": "vis",
+      "fodmap_group": "low_fodmap",
+      "fodmap_level": "very_low",
+      "safe_portion_g": 120,
+      "macros_per_100g": {
+        "calories": 262,
+        "protein_g": 22,
+        "carbs_g": 0,
+        "fat_g": 19,
+        "fiber_g": 0
+      },
+      "omega3_g_per_100g": 2.5,
+      "prebiotic_score": 0,
+      "timing_advice": "beperk bij vetgevoeligheid",
+      "source": "NEVO"
+    },
+    {
+      "id": "sardines",
+      "name": "Sardines (in olie, uitgelekt)",
+      "category": "vis",
+      "fodmap_group": "low_fodmap",
+      "fodmap_level": "very_low",
+      "safe_portion_g": 100,
+      "macros_per_100g": {
+        "calories": 208,
+        "protein_g": 24,
+        "carbs_g": 0,
+        "fat_g": 12,
+        "fiber_g": 0
+      },
+      "omega3_g_per_100g": 2.2,
+      "prebiotic_score": 0,
+      "timing_advice": "lunch, rijk aan omega-3",
+      "source": "NEVO"
+    },
+    {
+      "id": "tuna_light",
+      "name": "Tonijn (in water, uitgelekt)",
+      "category": "vis",
+      "fodmap_group": "low_fodmap",
+      "fodmap_level": "very_low",
+      "safe_portion_g": 120,
+      "macros_per_100g": {
+        "calories": 130,
+        "protein_g": 28,
+        "carbs_g": 0,
+        "fat_g": 1.5,
+        "fiber_g": 0
+      },
+      "omega3_g_per_100g": 0.3,
+      "prebiotic_score": 0,
+      "timing_advice": "magere post-workout eiwitbron",
+      "source": "NEVO"
+    },
+    {
+      "id": "cod",
+      "name": "Kabeljauw (gekookt)",
+      "category": "vis",
+      "fodmap_group": "low_fodmap",
+      "fodmap_level": "very_low",
+      "safe_portion_g": 180,
+      "macros_per_100g": {
+        "calories": 82,
+        "protein_g": 18,
+        "carbs_g": 0,
+        "fat_g": 0.7,
+        "fiber_g": 0
+      },
+      "omega3_g_per_100g": 0.2,
+      "prebiotic_score": 0,
+      "timing_advice": "licht verteerbaar",
+      "source": "NEVO"
+    },
+    {
+      "id": "halibut",
+      "name": "Heilbot (gekookt)",
+      "category": "vis",
+      "fodmap_group": "low_fodmap",
+      "fodmap_level": "very_low",
+      "safe_portion_g": 150,
+      "macros_per_100g": {
+        "calories": 112,
+        "protein_g": 23,
+        "carbs_g": 0,
+        "fat_g": 2.3,
+        "fiber_g": 0
+      },
+      "omega3_g_per_100g": 0.6,
+      "prebiotic_score": 0,
+      "timing_advice": "mager en eiwitrijk",
+      "source": "NEVO"
+    },
+    {
+      "id": "tilapia",
+      "name": "Tilapia (gekookt)",
+      "category": "vis",
+      "fodmap_group": "low_fodmap",
+      "fodmap_level": "very_low",
+      "safe_portion_g": 180,
+      "macros_per_100g": {
+        "calories": 128,
+        "protein_g": 26,
+        "carbs_g": 0,
+        "fat_g": 2.7,
+        "fiber_g": 0
+      },
+      "omega3_g_per_100g": 0.1,
+      "prebiotic_score": 0,
+      "timing_advice": "mager, geschikt voor elke maaltijd",
+      "source": "NEVO"
+    },
+    {
+      "id": "anchovy",
+      "name": "Ansjovis (in olie, uitgelekt)",
+      "category": "vis",
+      "fodmap_group": "low_fodmap",
+      "fodmap_level": "very_low",
+      "safe_portion_g": 50,
+      "macros_per_100g": {
+        "calories": 210,
+        "protein_g": 29,
+        "carbs_g": 0,
+        "fat_g": 10,
+        "fiber_g": 0
+      },
+      "omega3_g_per_100g": 1.6,
+      "prebiotic_score": 0,
+      "timing_advice": "zout; gebruik als smaakmaker",
+      "source": "NEVO"
+    },
+    {
+      "id": "herring",
+      "name": "Haring (gerookt/gepekeld)",
+      "category": "vis",
+      "fodmap_group": "low_fodmap",
+      "fodmap_level": "very_low",
+      "safe_portion_g": 100,
+      "macros_per_100g": {
+        "calories": 208,
+        "protein_g": 23,
+        "carbs_g": 0,
+        "fat_g": 13,
+        "fiber_g": 0
+      },
+      "omega3_g_per_100g": 2.1,
+      "prebiotic_score": 0,
+      "timing_advice": "beperk bij hoge bloeddruk",
+      "source": "NEVO"
+    },
+    {
+      "id": "trout",
+      "name": "Forel (gekookt)",
+      "category": "vis",
+      "fodmap_group": "low_fodmap",
+      "fodmap_level": "very_low",
+      "safe_portion_g": 150,
+      "macros_per_100g": {
+        "calories": 148,
+        "protein_g": 22,
+        "carbs_g": 0,
+        "fat_g": 6.5,
+        "fiber_g": 0
+      },
+      "omega3_g_per_100g": 1.4,
+      "prebiotic_score": 0,
+      "timing_advice": "omega-3 herstelmaaltijd",
+      "source": "NEVO"
+    },
+    {
+      "id": "cottage_cheese_lactose_free",
+      "name": "Hüttenkäse (lactosevrij)",
+      "category": "zuivel",
+      "fodmap_group": "low_fodmap",
+      "fodmap_level": "low",
+      "safe_portion_g": 150,
+      "macros_per_100g": {
+        "calories": 98,
+        "protein_g": 11,
+        "carbs_g": 3.4,
+        "fat_g": 4.3,
+        "fiber_g": 0
+      },
+      "omega3_g_per_100g": 0,
+      "prebiotic_score": 0,
+      "timing_advice": "avond voor langzame eiwitten",
+      "source": "NEVO"
+    },
+    {
+      "id": "greek_yogurt_lactose_free",
+      "name": "Griekse yoghurt (lactosevrij, 0% vet)",
+      "category": "zuivel",
+      "fodmap_group": "low_fodmap",
+      "fodmap_level": "low",
+      "safe_portion_g": 200,
+      "macros_per_100g": {
+        "calories": 59,
+        "protein_g": 10,
+        "carbs_g": 3.6,
+        "fat_g": 0.2,
+        "fiber_g": 0
+      },
+      "omega3_g_per_100g": 0,
+      "prebiotic_score": 2,
+      "timing_advice": "post-workout of snack",
+      "source": "NEVO/Monash"
+    },
+    {
+      "id": "tofu_firm",
+      "name": "Tofu (stevig, niet gemarineerd)",
+      "category": "plantaardig",
+      "fodmap_group": "low_fodmap",
+      "fodmap_level": "low",
+      "safe_portion_g": 150,
+      "macros_per_100g": {
+        "calories": 144,
+        "protein_g": 15,
+        "carbs_g": 3.9,
+        "fat_g": 8.7,
+        "fiber_g": 1.2
+      },
+      "omega3_g_per_100g": 0.1,
+      "prebiotic_score": 2,
+      "timing_advice": "plantaardige lunch/dinerbasis",
+      "source": "NEVO/Monash"
+    },
+    {
+      "id": "tempeh",
+      "name": "Tempeh (gestoomd)",
+      "category": "plantaardig",
+      "fodmap_group": "galactan",
+      "fodmap_level": "medium",
+      "safe_portion_g": 100,
+      "macros_per_100g": {
+        "calories": 193,
+        "protein_g": 20,
+        "carbs_g": 7.6,
+        "fat_g": 11,
+        "fiber_g": 4.5
+      },
+      "omega3_g_per_100g": 0.1,
+      "prebiotic_score": 8,
+      "timing_advice": "portie beperken bij gevoelige darm",
+      "source": "NEVO/Monash"
+    },
+    {
+      "id": "lentils_canned_rinsed",
+      "name": "Linzen (blik, afgespoeld)",
+      "category": "plantaardig",
+      "fodmap_group": "galactan",
+      "fodmap_level": "medium",
+      "safe_portion_g": 60,
+      "macros_per_100g": {
+        "calories": 116,
+        "protein_g": 9,
+        "carbs_g": 20,
+        "fat_g": 0.4,
+        "fiber_g": 8
+      },
+      "omega3_g_per_100g": 0.1,
+      "prebiotic_score": 9,
+      "timing_advice": "kleine portie voor vezels",
+      "source": "NEVO/Monash"
+    },
+    {
+      "id": "chickpeas_canned_rinsed",
+      "name": "Kikkererwten (blik, afgespoeld)",
+      "category": "plantaardig",
+      "fodmap_group": "galactan",
+      "fodmap_level": "medium",
+      "safe_portion_g": 60,
+      "macros_per_100g": {
+        "calories": 139,
+        "protein_g": 8.9,
+        "carbs_g": 27,
+        "fat_g": 2.6,
+        "fiber_g": 7.6
+      },
+      "omega3_g_per_100g": 0.1,
+      "prebiotic_score": 8,
+      "timing_advice": "beperkte portie; kan opgeblazenheid geven",
+      "source": "NEVO/Monash"
+    },
+    {
+      "id": "quinoa",
+      "name": "quinoa",
+      "category": "granen",
+      "fodmap_group": "low_fodmap",
+      "fodmap_level": "low",
+      "safe_portion_g": 120,
+      "macros_per_100g": {
+        "calories": 120,
+        "protein_g": 4.4,
+        "carbs_g": 21.0,
+        "fat_g": 1.9,
+        "fiber_g": 2.8
+      },
+      "omega3_g_per_100g": 0.1,
+      "prebiotic_score": 4,
+      "timing_advice": "complete koolhydraatbasis",
+      "source": "NEVO/Monash"
+    },
+    {
+      "id": "rice_white",
+      "name": "Witte rijst (gekookt)",
+      "category": "granen",
+      "fodmap_group": "low_fodmap",
+      "fodmap_level": "very_low",
+      "safe_portion_g": 200,
+      "macros_per_100g": {
+        "calories": 130,
+        "protein_g": 2.7,
+        "carbs_g": 28,
+        "fat_g": 0.3,
+        "fiber_g": 0.4
+      },
+      "omega3_g_per_100g": 0,
+      "prebiotic_score": 1,
+      "timing_advice": "pre- en post-workout",
+      "source": "NEVO/Monash"
+    },
+    {
+      "id": "sweet_potato",
+      "name": "Zoete aardappel (gekookt)",
+      "category": "groenten",
+      "fodmap_group": "polyol",
+      "fodmap_level": "low",
+      "safe_portion_g": 100,
+      "macros_per_100g": {
+        "calories": 86,
+        "protein_g": 1.6,
+        "carbs_g": 20.1,
+        "fat_g": 0.1,
+        "fiber_g": 3.0
+      },
+      "omega3_g_per_100g": 0,
+      "prebiotic_score": 6,
+      "timing_advice": "post-workout, portie bewaken",
+      "source": "NEVO/Monash"
+    },
+    {
+      "id": "courgette",
+      "name": "courgette",
+      "category": "groenten",
+      "fodmap_group": "low_fodmap",
+      "fodmap_level": "low",
+      "safe_portion_g": 200,
+      "macros_per_100g": {
+        "calories": 17,
+        "protein_g": 1.2,
+        "carbs_g": 3.1,
+        "fat_g": 0.3,
+        "fiber_g": 1.0
+      },
+      "omega3_g_per_100g": 0,
+      "prebiotic_score": 3,
+      "timing_advice": "darmvriendelijke groente",
+      "source": "NEVO/Monash"
+    },
+    {
+      "id": "spinach_cooked",
+      "name": "Spinazie (gekookt)",
+      "category": "groenten",
+      "fodmap_group": "low_fodmap",
+      "fodmap_level": "low",
+      "safe_portion_g": 150,
+      "macros_per_100g": {
+        "calories": 23,
+        "protein_g": 2.9,
+        "carbs_g": 3.6,
+        "fat_g": 0.4,
+        "fiber_g": 2.2
+      },
+      "omega3_g_per_100g": 0.1,
+      "prebiotic_score": 2,
+      "timing_advice": "ijzer/magnesiumrijke groente",
+      "source": "NEVO"
+    },
+    {
+      "id": "carrot_cooked",
+      "name": "wortel",
+      "category": "groenten",
+      "fodmap_group": "low_fodmap",
+      "fodmap_level": "very_low",
+      "safe_portion_g": 200,
+      "macros_per_100g": {
+        "calories": 41,
+        "protein_g": 0.9,
+        "carbs_g": 9.6,
+        "fat_g": 0.2,
+        "fiber_g": 3.0
+      },
+      "omega3_g_per_100g": 0,
+      "prebiotic_score": 4,
+      "timing_advice": "rustige vezelbron",
+      "source": "NEVO/Monash"
+    },
+    {
+      "id": "banana_unripe",
+      "name": "banaan",
+      "category": "fruit",
+      "fodmap_group": "fructose",
+      "fodmap_level": "low",
+      "safe_portion_g": 100,
+      "macros_per_100g": {
+        "calories": 89,
+        "protein_g": 1.1,
+        "carbs_g": 22.8,
+        "fat_g": 0.3,
+        "fiber_g": 2.6
+      },
+      "omega3_g_per_100g": 0,
+      "prebiotic_score": 5,
+      "timing_advice": "pre-workout brandstof",
+      "source": "NEVO/Monash"
+    },
+    {
+      "id": "olive_oil",
+      "name": "Olijfolie (extra vierge)",
+      "category": "vetten",
+      "fodmap_group": "low_fodmap",
+      "fodmap_level": "very_low",
+      "safe_portion_g": 15,
+      "macros_per_100g": {
+        "calories": 884,
+        "protein_g": 0,
+        "carbs_g": 0,
+        "fat_g": 100,
+        "fiber_g": 0
+      },
+      "omega3_g_per_100g": 0.7,
+      "prebiotic_score": 0,
+      "timing_advice": "niet vlak voor training",
+      "source": "NEVO"
+    },
+    {
+      "id": "walnuts",
+      "name": "Walnoten",
+      "category": "noten",
+      "fodmap_group": "fructan",
+      "fodmap_level": "medium",
+      "safe_portion_g": 30,
+      "macros_per_100g": {
+        "calories": 654,
+        "protein_g": 15,
+        "carbs_g": 14,
+        "fat_g": 65,
+        "fiber_g": 7
+      },
+      "omega3_g_per_100g": 9.1,
+      "prebiotic_score": 6,
+      "timing_advice": "kleine portie",
+      "source": "NEVO/Monash"
+    },
+    {
+      "id": "flaxseed_ground",
+      "name": "Lijnzaad (gemalen)",
+      "category": "zaden",
+      "fodmap_group": "low_fodmap",
+      "fodmap_level": "low",
+      "safe_portion_g": 15,
+      "macros_per_100g": {
+        "calories": 534,
+        "protein_g": 18,
+        "carbs_g": 29,
+        "fat_g": 42,
+        "fiber_g": 27
+      },
+      "omega3_g_per_100g": 22.8,
+      "prebiotic_score": 9,
+      "timing_advice": "1-2 eetlepels met water",
+      "source": "NEVO"
+    },
+    {
+      "id": "chia_seed",
+      "name": "Chiazaden",
+      "category": "zaden",
+      "fodmap_group": "low_fodmap",
+      "fodmap_level": "low",
+      "safe_portion_g": 20,
+      "macros_per_100g": {
+        "calories": 486,
+        "protein_g": 17,
+        "carbs_g": 42,
+        "fat_g": 31,
+        "fiber_g": 34
+      },
+      "omega3_g_per_100g": 17.5,
+      "prebiotic_score": 9,
+      "timing_advice": "rustig opbouwen met water",
+      "source": "NEVO/Monash"
+    },
+    {
+      "id": "psyllium",
+      "name": "Psylliumvezels",
+      "category": "vezels",
+      "fodmap_group": "low_fodmap",
+      "fodmap_level": "low",
+      "safe_portion_g": 10,
+      "macros_per_100g": {
+        "calories": 200,
+        "protein_g": 0.5,
+        "carbs_g": 80,
+        "fat_g": 0.5,
+        "fiber_g": 85
+      },
+      "omega3_g_per_100g": 0,
+      "prebiotic_score": 10,
+      "timing_advice": "met veel water, niet vlak voor training",
+      "source": "NVD heuristic"
+    }
+  ]
+}

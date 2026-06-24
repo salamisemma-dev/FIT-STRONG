@@ -1,0 +1,21 @@
+{
+  "foods": [
+    {
+      "id": "salmon_wild",
+      "amount_g": 150
+    },
+    {
+      "id": "quinoa",
+      "amount_g": 120
+    },
+    {
+      "id": "courgette",
+      "amount_g": 200
+    }
+  ],
+  "context": {
+    "meal_timing": "post_workout",
+    "fodmap_sensitive": true
+  },
+  "notes": "Voorbeeld van visrijke post-workout maaltijd."
+}

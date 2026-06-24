@@ -7,7 +7,7 @@ description: Evidence-based nutrition & training coach (NL). Use when a user wan
 
 Turns a client's diary (food, symptoms, training) into a personalised, evidence-based
 report: macro/energy targets, suspected FODMAP triggers, energy-balance & dehydration
-alerts, and an indicative gut-microbiome score. **Indicative, not medical** — every
+alerts, indicative gut-microbiome score, and practical food/supplement combinations. **Indicative, not medical** — every
 report carries a disclaimer and escalates to a dietitian when warranted.
 
 The science and exact thresholds live in `../constitution.md` and `../specs/`. This
@@ -39,7 +39,13 @@ fit-strong <diary.json> --food-db config/food_db.json
 ```
 This returns the full report as JSON. (Or import `fit_strong.generate_report` directly.)
 
-### Phase 3 — Advice (interpret the JSON, in Dutch)
+### Phase 3 — Combination support (optional)
+When the user asks "wat kan ik eten / combineren?", assemble a request like
+`../examples/sample_combination_request.json` and call `fit_strong.recommend_combination`.
+Report only known available foods/supplements, surface warnings, and do not prescribe
+supplements as medical treatment.
+
+### Phase 4 — Advice (interpret the JSON, in Dutch)
 - **macro_targets** → present protein (g), carb band (g, moderate/intensive) and energy
   range. Add pre/post-workout timing (pre 1–2 g/kg carbs low-FODMAP; post 25 g eiwit +
   ~40 g snelle koolhydraten).

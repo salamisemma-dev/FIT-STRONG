@@ -37,4 +37,4 @@ source (`PYTHONPATH=src`) or an installed package (`fit-strong`).
 `tests/test_cli_packaging.py` — asserts default food DB fallback loads when the repo
 config path is unavailable, `run(...)` does not mutate symptom/workout records, and the
 source DB (`config/food_db.json`) and packaged copy are content-identical. The
-`scripts/bob_validate.mjs` food-DB drift gate enforces the same identity in CI.
+`scripts/bob_validate.mjs` library drift gate enforces the same identity in CI.

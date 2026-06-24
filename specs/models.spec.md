@@ -27,8 +27,10 @@ Dataclasses in `src/fit_strong/models.py` (frozen where natural):
 - `FoodItem(name, amount_g, fodmap_group, fodmap_level)` — one eaten item.
   - validate: `amount_g` ≥ 0.
 - `FoodRef(name, fodmap_group, fodmap_level, calories_per_100g, protein_per_100g,
-  carbs_per_100g, fat_per_100g, fiber_per_100g, prebiotic_score, safe_portion_g=None)` —
-  reference DB row. `prebiotic_score` in [0,10].
+  carbs_per_100g, fat_per_100g, fiber_per_100g, prebiotic_score, safe_portion_g=None,
+  id=None, category=None, omega3_g_per_100g=0.0, timing_advice=None, source=None, extra={})` —
+  reference DB row. `prebiotic_score` in [0,10]; macro values, safe portion and omega-3 are non-negative.
+  Optional metadata supports the v2 library without forcing algorithm modules to depend on it.
 - `Meal(recorded_at: datetime, meal_type, items: list[FoodItem], notes=None)`.
 - `Symptom(recorded_at: datetime, bristol_stool=None, abdominal_pain=None, bloating=None,
   energy_level=None, fatigue_score=None, stress_level=None, sleep_hours=None)`.

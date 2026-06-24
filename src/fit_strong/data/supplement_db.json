@@ -1,0 +1,232 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-06-24",
+  "supplements": [
+    {
+      "id": "creatine_monohydrate",
+      "name": "Creatine Monohydraat",
+      "form": "poeder",
+      "benefits": [
+        "kracht",
+        "explosieve prestatie"
+      ],
+      "potential_issues": [
+        "maagklachten bij hoge dosering"
+      ],
+      "timing": "post-workout met koolhydraten",
+      "fodmap_impact": "geen",
+      "interactions": [],
+      "source": "ISSN",
+      "safe_dose": {
+        "amount": 5,
+        "unit": "g"
+      }
+    },
+    {
+      "id": "whey_isolate_lactose_free",
+      "name": "Whey isolate lactosevrij",
+      "form": "poeder",
+      "benefits": [
+        "snelle eiwitopname",
+        "spierherstel"
+      ],
+      "potential_issues": [
+        "check polyolen/aroma's"
+      ],
+      "timing": "direct post-workout",
+      "fodmap_impact": "laag mits lactosevrij en zonder polyolen",
+      "interactions": [],
+      "source": "ISSN/Monash heuristic",
+      "safe_dose": {
+        "amount": 25,
+        "unit": "g"
+      }
+    },
+    {
+      "id": "casein_micellar",
+      "name": "Micellaire caseine lactosevrij",
+      "form": "poeder",
+      "benefits": [
+        "langzame eiwitafgifte"
+      ],
+      "potential_issues": [
+        "kan lactose bevatten per merk"
+      ],
+      "timing": "voor het slapen",
+      "fodmap_impact": "laag mits lactosevrij",
+      "interactions": [],
+      "source": "ISSN",
+      "safe_dose": {
+        "amount": 30,
+        "unit": "g"
+      }
+    },
+    {
+      "id": "omega3_fish_oil",
+      "name": "Omega-3 visolie",
+      "form": "capsule",
+      "benefits": [
+        "EPA/DHA aanvulling"
+      ],
+      "potential_issues": [
+        "oprispingen",
+        "voorzichtig met bloedverdunners"
+      ],
+      "timing": "bij vetbevattende maaltijd",
+      "fodmap_impact": "geen",
+      "interactions": [
+        "bloedverdunners"
+      ],
+      "source": "Wageningen/EFSA heuristic",
+      "safe_dose": {
+        "amount": 2000,
+        "unit": "mg"
+      }
+    },
+    {
+      "id": "magnesium_glycinate",
+      "name": "Magnesiumglycinaat",
+      "form": "capsule",
+      "benefits": [
+        "spierontspanning",
+        "slaap"
+      ],
+      "potential_issues": [
+        "mild laxerend bij sommige gebruikers"
+      ],
+      "timing": "avond",
+      "fodmap_impact": "geen",
+      "interactions": [],
+      "source": "LUMC heuristic",
+      "safe_dose": {
+        "amount": 200,
+        "unit": "mg"
+      }
+    },
+    {
+      "id": "probiotic_bifido",
+      "name": "Probiotica Bifidobacterium zonder FOS/inuline",
+      "form": "capsule",
+      "benefits": [
+        "darmflora ondersteuning"
+      ],
+      "potential_issues": [
+        "merken kunnen FOS/inuline bevatten"
+      ],
+      "timing": "bij maaltijd",
+      "fodmap_impact": "kies FODMAP-vrije hulpstoffen",
+      "interactions": [],
+      "source": "Maastricht heuristic",
+      "safe_dose": {
+        "amount": null,
+        "unit": null,
+        "note": "volgens product"
+      }
+    },
+    {
+      "id": "electrolytes_no_sorbitol",
+      "name": "Elektrolyten zonder suikeralcoholen",
+      "form": "poeder/tablet",
+      "benefits": [
+        "hydratatie",
+        "kramppreventie"
+      ],
+      "potential_issues": [
+        "sorbitol/maltitol kunnen diarree geven"
+      ],
+      "timing": "tijdens of na training",
+      "fodmap_impact": "vermijd polyolen",
+      "interactions": [],
+      "source": "sports hydration heuristic",
+      "safe_dose": {
+        "amount": null,
+        "unit": null,
+        "note": "volgens product"
+      }
+    },
+    {
+      "id": "vitamin_d3",
+      "name": "Vitamine D3",
+      "form": "capsule/druppels",
+      "benefits": [
+        "botgezondheid",
+        "immuunfunctie"
+      ],
+      "potential_issues": [
+        "overdosering bij stapelen"
+      ],
+      "timing": "bij vetrijke maaltijd",
+      "fodmap_impact": "geen",
+      "interactions": [],
+      "source": "Voedingscentrum/Wageningen heuristic",
+      "safe_dose": {
+        "amount": 25,
+        "unit": "mcg"
+      }
+    },
+    {
+      "id": "l_glutamine",
+      "name": "L-Glutamine",
+      "form": "poeder",
+      "benefits": [
+        "darmbarriere hypothese",
+        "herstel"
+      ],
+      "potential_issues": [
+        "maagklachten bij hoge dosis"
+      ],
+      "timing": "post-workout of avond",
+      "fodmap_impact": "geen",
+      "interactions": [],
+      "source": "Maastricht heuristic",
+      "safe_dose": {
+        "amount": 5,
+        "unit": "g"
+      }
+    },
+    {
+      "id": "caffeine_anhydrous",
+      "name": "Cafeine anhydraat",
+      "form": "capsule/poeder",
+      "benefits": [
+        "alertheid",
+        "prestatie"
+      ],
+      "potential_issues": [
+        "kan darmprikkeling geven",
+        "slaapverstoring"
+      ],
+      "timing": "30-60 min pre-workout",
+      "fodmap_impact": "geen",
+      "interactions": [
+        "PDS voorzichtig",
+        "slaapproblemen"
+      ],
+      "source": "ISSN",
+      "safe_dose": {
+        "amount": 200,
+        "unit": "mg"
+      }
+    },
+    {
+      "id": "beta_alanine",
+      "name": "Beta-alanine",
+      "form": "poeder",
+      "benefits": [
+        "uithoudingsvermogen",
+        "buffering"
+      ],
+      "potential_issues": [
+        "tintelingen"
+      ],
+      "timing": "dagelijks gesplitst",
+      "fodmap_impact": "geen",
+      "interactions": [],
+      "source": "ISSN",
+      "safe_dose": {
+        "amount": 3,
+        "unit": "g"
+      }
+    }
+  ]
+}

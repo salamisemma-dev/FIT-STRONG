@@ -81,9 +81,20 @@ tests` to execute every method named here.
 |---|---|
 | Default food DB loads without repo `config/` (install fallback) | `test_default_food_db_has_packaged_fallback` |
 | `run(...)` does not mutate parsed diary | `test_run_does_not_mutate_loaded_diary` |
-| Source DB and packaged copy are content-identical | `test_food_db_source_and_packaged_copy_are_identical` + `bob_validate.mjs` food-DB drift gate |
+| Source DB and packaged copy are content-identical | `test_food_db_source_and_packaged_copy_are_identical` + `bob_validate.mjs` library drift gate |
 
 ## Backlog (toward machine-enforced clause traceability)
 Annotate each test with its spec-clause id (e.g. a `# trace: spec-macro-targets/protein`
 marker) and extend `bob_validate.mjs` to assert every enumerated clause has ≥1 matching
 marker. Until then this matrix is the reviewed contract.
+
+
+## spec-combination-library
+- v2 food DB loads by ID and legacy name -> `tests/test_combination_library.py::test_v2_food_db_loads_by_id_and_legacy_name`
+- supplement/rule loading and normalized dose output -> `tests/test_combination_library.py::test_supplements_and_rules_load`
+- post-workout fish combo skips redundant omega-3 -> `tests/test_combination_library.py::test_post_workout_fish_combo_skips_extra_omega3`
+- sensitive gut filters high-FODMAP and warns caffeine/fat timing -> `tests/test_combination_library.py::test_sensitive_gut_filters_high_fodmap_and_warns_caffeine`
+- unknown available foods are surfaced -> `tests/test_combination_library.py::test_unresolved_foods_are_reported`
+- config/package data mirrors stay identical -> `tests/test_combination_library.py::test_config_and_packaged_library_copies_are_identical`
+- rule ingredients reference known library items -> `tests/test_combination_library.py::test_rule_ingredients_reference_known_library_items`
+- object/meal-doc request shapes accepted, requested amount honored -> `tests/test_combination_library.py::test_accepts_object_request_shapes`

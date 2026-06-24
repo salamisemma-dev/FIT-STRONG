@@ -1,0 +1,21 @@
+{
+  "goal": "muscle_gain_and_recovery",
+  "context": {
+    "meal_timing": "post_workout",
+    "fodmap_sensitive": true,
+    "avoid_lactose": true,
+    "workout_intensity": 8,
+    "sweat_loss_high": true
+  },
+  "available_foods": [
+    "salmon_wild",
+    "quinoa",
+    "courgette",
+    "spinach_cooked"
+  ],
+  "available_supplements": [
+    "creatine_monohydrate",
+    "omega3_fish_oil",
+    "electrolytes_no_sorbitol"
+  ]
+}

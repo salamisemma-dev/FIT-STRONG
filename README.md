@@ -17,6 +17,7 @@ gut health**.
 | `check_energy_balance` | Low-calorie / low-protein / dehydration alerts |
 | `microbiome_score` | Indicative 0–100 gut-feeding score (fibre + prebiotic quality) |
 | `generate_report` | All of the above, composed into one report |
+| `recommend_combination` | Gut-aware food + supplement combo from available items |
 
 ## Quickstart
 ```bash
@@ -32,6 +33,9 @@ python -m unittest discover -s tests
 
 # Spec / anti-drift gate
 node scripts/bob_validate.mjs --strict .
+
+# Food/supplement combination example
+python -c "import json, fit_strong as fs; req=json.load(open('examples/sample_combination_request.json', encoding='utf-8')); print(json.dumps(fs.recommend_combination(req).to_dict(), indent=2, ensure_ascii=False))"
 ```
 
 Or as a library:
@@ -46,21 +50,26 @@ print(report.to_dict())
 ## Project layout (BOB / spec-driven)
 ```
 constitution.md          # supreme contract (tech standards, layering, evidence policy)
-specs/*.spec.md          # 8 executable specs — permanent system memory
+specs/*.spec.md          # 9 executable specs — permanent system memory
 src/fit_strong/          # models -> algorithms (pure) -> engine -> cli
-src/fit_strong/data/     # packaged food DB (install-safe copy of config/food_db.json)
-config/food_db.json      # editable source food DB (FODMAP + macros + prebiotic score)
-tests/                   # 44 unittest cases, one file per spec
-scripts/bob_validate.mjs # spec + food-DB drift gate (CI)
+src/fit_strong/data/     # packaged JSON libraries (install-safe mirror of config/)
+config/food_db.json      # v2 food library (FODMAP + macros + omega-3 + timing)
+config/supplement_db.json # supplement library (dose, timing, warnings)
+config/combination_rules.json # declarative combo rules
+tests/                   # 52 unittest cases, spec-linked
+scripts/bob_validate.mjs # spec + library drift gate (CI)
 scripts/bob_ready.mjs    # validate + tests in one gate (CI)
 skill/SKILL.md           # Claude coaching-skill wrapper
 docs/PVA.md              # plan van aanpak: pros, cons, and the fix for each con
 docs/EVIDENCE.md         # every threshold + source + confidence level (honest)
 docs/TRACEABILITY.md     # spec clause -> test method matrix
 examples/sample_diary.json
+examples/sample_combination_request.json
+examples/sample_high_protein_meal.json
+examples/sample_supplement_stack.json
 ```
 
 ## Status
-Core engine complete & green (43 tests). Web frontend, Postgres persistence, auth and
+Core engine complete & green (52 tests). Web frontend, Postgres persistence, auth and
 ML are **roadmap** — see [docs/PVA.md](docs/PVA.md). The engine is deliberately free of
 those concerns so they layer on without a rewrite.

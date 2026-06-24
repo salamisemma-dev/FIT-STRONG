@@ -103,26 +103,23 @@ for (const file of specs) {
 // PROJECT-SPECIFIC DRIFT CHECKS — add yours below (schema↔code, naming, etc.).
 // ─────────────────────────────────────────────────────────────────────────────
 
-// Food-DB mirror: spec-cli-packaging declares config/food_db.json the editable source
-// and src/fit_strong/data/food_db.json the install-safe copy. Nothing else keeps them
-// in sync, so enforce content-identity (CRLF-normalised) here — they HAD drifted by
-// line-endings until this gate was added.
-{
-  const srcDb = join(ROOT, 'config', 'food_db.json');
-  const pkgDb = join(ROOT, 'src', 'fit_strong', 'data', 'food_db.json');
+// Library mirrors: config/ is the editable source; src/fit_strong/data/ is the
+// install-safe package copy. Enforce parsed content identity so formatting/EOL never
+// false-fails, but real data drift is blocked.
+for (const name of ['food_db.json', 'supplement_db.json', 'combination_rules.json']) {
+  const srcDb = join(ROOT, 'config', name);
+  const pkgDb = join(ROOT, 'src', 'fit_strong', 'data', name);
   if (existsSync(srcDb) && existsSync(pkgDb)) {
-    const norm = (p) => JSON.stringify(JSON.parse(read(p)));  // parse so formatting/EOL never false-fail
+    const norm = (p) => JSON.stringify(JSON.parse(read(p)));
     try {
       if (norm(srcDb) !== norm(pkgDb)) {
-        errors.push('Food-DB drift: config/food_db.json and src/fit_strong/data/food_db.json differ. '
-          + 'config/ is the source — copy it into the package data (spec-cli-packaging).');
+        errors.push(`Library drift: config/${name} and src/fit_strong/data/${name} differ. config/ is the source.`);
       }
     } catch (e) {
-      errors.push(`Food-DB parse error in one of the food_db.json copies: ${e.message}`);
+      errors.push(`Library JSON parse error in ${name}: ${e.message}`);
     }
   } else if (existsSync(srcDb) !== existsSync(pkgDb)) {
-    errors.push('Food-DB mirror incomplete: exactly one of config/food_db.json '
-      + 'or src/fit_strong/data/food_db.json exists (spec-cli-packaging requires both).');
+    errors.push(`Library mirror incomplete for ${name}: config/ and package data must both exist.`);
   }
 }
 
